@@ -1,4 +1,4 @@
-package systems.planets;
+package system;
 
 import engine.FileGenerator;
 import engine.Particle;
@@ -9,13 +9,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-public class PlanetFileGenerator implements FileGenerator {
+public class PedestrianFileGenerator implements FileGenerator {
     private static final String folder = "out/";
 
     private final BufferedWriter bw;
     private FileWriter fw;
 
-    public PlanetFileGenerator(String filename) {
+    public PedestrianFileGenerator(String filename) {
         try {
             File directory = new File(folder);
             if (!directory.exists()) {
@@ -33,7 +33,7 @@ public class PlanetFileGenerator implements FileGenerator {
     public void addToFile(List<Particle> particles, double timePassed) {
         try {
             bw.write(particles.size() + "\n");
-            bw.write("id xPosition yPosition xVelocity yVelocity radius mass animationRadius redColor greenColor blueColor timePassed\n");
+            bw.write("id xPosition yPosition xVelocity yVelocity radius timePassed\n");
             for (Particle particle : particles) {
                 bw.write(particle.getId() + " " +
                         particle.getPosition().getX() + " " +
@@ -41,11 +41,6 @@ public class PlanetFileGenerator implements FileGenerator {
                         particle.getVelocity().getX() + " " +
                         particle.getVelocity().getY() + " " +
                         particle.getRadius() + " " +
-                        particle.getMass() + " " +
-                        particle.getAnimationRadius() + " " +
-                        particle.getRedColor() + " " +
-                        particle.getGreenColor() + " " +
-                        particle.getBlueColor() + " " +
                         timePassed + "\n");
             }
         } catch (IOException e) {
