@@ -40,11 +40,8 @@ public class TimeStepSimulator {
     public void simulate() {
         fileGenerator.addToFile(particles, time);
         while (!cutCondition.isFinished(particles, time)) {
-            findContactsAndCalculateVe(particles);
-            adjustAllRadius(particles);
-            computeVd(particles);
-            calculateNewPositions(particles);
-            clearParticles(particles);
+            checkCollisions(particles);
+            moveParticles(particles);
             time += timeDelta;
             if (time >= timeToSave) {
                 fileGenerator.addToFile(particles, time);
@@ -54,7 +51,7 @@ public class TimeStepSimulator {
         fileGenerator.closeFile();
     }
 
-    private void findContactsAndCalculateVe(List<Particle> particles) {
+    private void checkCollisions(List<Particle> particles) {
         for (Particle p1 : particles) {
             Vector escapeVector = new Vector(0, 0);
             boolean overlapping = false;
@@ -95,7 +92,7 @@ public class TimeStepSimulator {
             }
 
             // Bottom wall
-            if (p1.getPosition().getY() + p1.getRadius() <= 0) {
+            if (p1.getPosition().getY() - p1.getRadius() <= 0) {
                 Vector bottomWallVirtualPosition = new Vector(p1.getPosition().getX(), 0);
                 Vector wallEscapeVector1 = bottomWallVirtualPosition.calculatePerpendicularUnitVector(p1.getPosition());
 
@@ -114,28 +111,21 @@ public class TimeStepSimulator {
         }
     }
 
-    private void adjustAllRadius(List<Particle> particles) {
+    private void moveParticles(List<Particle> particles){
         for (Particle particle : particles) {
+            //adjust radius
             if (particle.isOverlapped()) {
                 particle.setRadius(minRadius);
             } else if (particle.getRadius() < maxRadius) {
                 double newR = particle.getRadius() + (minRadius / (tau / timeDelta));
                 particle.setRadius(Math.min(newR, maxRadius));
             }
-        }
-    }
-
-    private void computeVd(List<Particle> particles) {
-        for (Particle particle : particles) {
+            //set max velocity if not overlapped
             if (!particle.isOverlapped()) {
                 double xVelocity = maxVelocity * Math.pow((particle.getRadius() - minRadius) / (maxRadius - minRadius), beta);
                 particle.setVelocity(new Vector(xVelocity, 0));
             }
-        }
-    }
-
-    private void calculateNewPositions(List<Particle> particles) {
-        for (Particle particle : particles) {
+            //set position
             // x(t + dt) = x(t) + v(t) * dt
             Vector newPosition = particle.getPosition().add(particle.getVelocity().multiply(timeDelta));
 
@@ -148,11 +138,6 @@ public class TimeStepSimulator {
             }
 
             particle.setPosition(newPosition);
-        }
-    }
-
-    private void clearParticles(List<Particle> particles) {
-        for (Particle particle : particles) {
             particle.setOverlapped(false);
         }
     }

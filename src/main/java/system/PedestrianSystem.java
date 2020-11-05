@@ -20,8 +20,8 @@ public class PedestrianSystem {
     public static final double LENGTH = RADIUS * 2 * Math.PI;  // m
     public static final double WIDTH = 5 * (MAX_RADIUS + MIN_RADIUS);  // m
     public static final double BETA = 0.9;
-    public static final double TIME_DELTA = 0.02;  // s
-    public static final double SAVE_TIME_DELTA = 0.02; // s
+    public static final double TIME_DELTA = 0.01;  // s
+    public static final double SAVE_TIME_DELTA = 0.01; // s
     public static final double TAU = 0.5; // s
     public static final double SIMULATION_TIME = 20; // s
 
@@ -31,7 +31,7 @@ public class PedestrianSystem {
     public static void runSimulation() {
         Random random = new Random();
         PedestrianSystemGenerator pedestrianSystemGenerator = new PedestrianSystemGenerator(PARTICLES_QUANTITY, random, LENGTH, WIDTH, MAX_RADIUS, MIN_RADIUS, MAX_VELOCITY, BETA);
-        PedestrianFileGenerator pedestrianFileGenerator = new PedestrianFileGenerator(FILENAME);
+        PedestrianFileGenerator pedestrianFileGenerator = new PedestrianFileGenerator(FILENAME, LENGTH, WIDTH);
         TimeCutCondition timeCutCondition = new TimeCutCondition(SIMULATION_TIME);
         TimeStepSimulator timeStepSimulator = new TimeStepSimulator(TIME_DELTA, SAVE_TIME_DELTA, timeCutCondition, pedestrianFileGenerator, pedestrianSystemGenerator.getParticles(), LENGTH, WIDTH, MIN_RADIUS, MAX_RADIUS, MAX_VELOCITY, BETA, TAU);
         timeStepSimulator.simulate();
