@@ -12,23 +12,23 @@ public class TimeStepSimulator {
     private final List<Particle> particles;
     private double time;
     private double timeToSave;
-    private final double length;
-    private final double width;
+    private final double hallLength;
+    private final double hallWidth;
     private final double minRadius;
     private final double maxRadius;
     private final double maxVelocity;
     private final double beta;
     private final double tau;
 
-    public TimeStepSimulator(double timeDelta, double saveTimeDelta, CutCondition cutCondition, FileGenerator fileGenerator, List<Particle> particles, double length, double width, double minRadius, double maxRadius, double maxVelocity, double beta, double tau) {
+    public TimeStepSimulator(double timeDelta, double saveTimeDelta, CutCondition cutCondition, FileGenerator fileGenerator, List<Particle> particles, double hallLength, double hallWidth, double minRadius, double maxRadius, double maxVelocity, double beta, double tau) {
         this.timeDelta = timeDelta;
         this.saveTimeDelta = saveTimeDelta;
         this.cutCondition = cutCondition;
         this.fileGenerator = fileGenerator;
         this.particles = particles;
         this.timeToSave = saveTimeDelta;
-        this.length = length;
-        this.width = width;
+        this.hallLength = hallLength;
+        this.hallWidth = hallWidth;
         this.minRadius = minRadius;
         this.maxRadius = maxRadius;
         this.maxVelocity = maxVelocity;
@@ -40,10 +40,10 @@ public class TimeStepSimulator {
     public void simulate() {
         fileGenerator.addToFile(particles, time);
         while (!cutCondition.isFinished(particles, time)) {
-            findContactsAndCalculateVe(particles, width);
-            adjustAllRadius(particles, minRadius, maxRadius);
+            findContactsAndCalculateVe(particles);
+            adjustAllRadius(particles);
             computeVd(particles);
-            calculateNewPositions(particles, length);
+            calculateNewPositions(particles);
             clearParticles(particles);
             time += timeDelta;
             if (time >= timeToSave) {
@@ -54,23 +54,38 @@ public class TimeStepSimulator {
         fileGenerator.closeFile();
     }
 
-    private void findContactsAndCalculateVe(List<Particle> particles, double width) {
+    private void findContactsAndCalculateVe(List<Particle> particles) {
         for (Particle p1 : particles) {
-
             Vector escapeVector = new Vector(0, 0);
             boolean overlapping = false;
 
             // Equation number 6
             for (Particle p2 : particles) {
-                if (!p1.equals(p2) && areParticlesOverlapping(p1, p2)) {
-                    escapeVector = escapeVector.add(p2.getPosition().calculatePerpendicularUnitVector(p1.getPosition()));
-                    overlapping = true;
+                if (!p1.equals(p2)) {
+                    if(p1.getPosition().distance(p2.getPosition()) < p1.getRadius() + p2.getRadius()) {
+                        escapeVector = escapeVector.add(p2.getPosition().calculatePerpendicularUnitVector(p1.getPosition()));
+                        overlapping = true;
+                    }
+                    else if(p1.getPosition().getX() >= hallLength - maxRadius){
+                        Vector auxPosition = new Vector(p1.getPosition().getX() - hallLength, p1.getPosition().getY());
+                        if(auxPosition.distance(p2.getPosition()) < p1.getRadius() + p2.getRadius()) {
+                            escapeVector = escapeVector.add(p2.getPosition().calculatePerpendicularUnitVector(auxPosition));
+                            overlapping = true;
+                        }
+                    }
+                    else if(p1.getPosition().getX() <= maxRadius){
+                        Vector auxPosition = new Vector(p1.getPosition().getX() + hallLength, p1.getPosition().getY());
+                        if(auxPosition.distance(p2.getPosition()) < p1.getRadius() + p2.getRadius()) {
+                            escapeVector = escapeVector.add(p2.getPosition().calculatePerpendicularUnitVector(auxPosition));
+                            overlapping = true;
+                        }
+                    }
                 }
             }
 
             // Upper wall
-            if (upperWallOverlapping(p1)) {
-                Vector upperWallVirtualPosition = new Vector(p1.getPosition().getX(), width);
+            if (p1.getPosition().getY() + p1.getRadius() >= hallWidth) {
+                Vector upperWallVirtualPosition = new Vector(p1.getPosition().getX(), hallWidth);
                 Vector wallEscapeVector1 = upperWallVirtualPosition.calculatePerpendicularUnitVector(p1.getPosition());
 
                 Vector wallEscapeVector = new Vector(wallEscapeVector1.getX(), -Math.abs(wallEscapeVector1.getY()));
@@ -80,7 +95,7 @@ public class TimeStepSimulator {
             }
 
             // Bottom wall
-            if (bottomWallOverlapping(p1)) {
+            if (p1.getPosition().getY() + p1.getRadius() <= 0) {
                 Vector bottomWallVirtualPosition = new Vector(p1.getPosition().getX(), 0);
                 Vector wallEscapeVector1 = bottomWallVirtualPosition.calculatePerpendicularUnitVector(p1.getPosition());
 
@@ -99,7 +114,7 @@ public class TimeStepSimulator {
         }
     }
 
-    private void adjustAllRadius(List<Particle> particles, double minRadius, double maxRadius) {
+    private void adjustAllRadius(List<Particle> particles) {
         for (Particle particle : particles) {
             if (particle.isOverlapped()) {
                 particle.setRadius(minRadius);
@@ -113,22 +128,23 @@ public class TimeStepSimulator {
     private void computeVd(List<Particle> particles) {
         for (Particle particle : particles) {
             if (!particle.isOverlapped()) {
-                particle.setVelocity(getVelocityNoOverlap(particle));
+                double xVelocity = maxVelocity * Math.pow((particle.getRadius() - minRadius) / (maxRadius - minRadius), beta);
+                particle.setVelocity(new Vector(xVelocity, 0));
             }
         }
     }
 
-    private void calculateNewPositions(List<Particle> particles, double length) {
+    private void calculateNewPositions(List<Particle> particles) {
         for (Particle particle : particles) {
             // x(t + dt) = x(t) + v(t) * dt
             Vector newPosition = particle.getPosition().add(particle.getVelocity().multiply(timeDelta));
 
-            if (newPosition.getX() >= length) {
-                newPosition = new Vector(newPosition.getX() - length, newPosition.getY());
+            if (newPosition.getX() >= hallLength) {
+                newPosition = new Vector(newPosition.getX() - hallLength, newPosition.getY());
             }
 
             if (newPosition.getX() <= 0) {
-                newPosition = new Vector(newPosition.getX() + length, newPosition.getY());
+                newPosition = new Vector(newPosition.getX() + hallLength, newPosition.getY());
             }
 
             particle.setPosition(newPosition);
@@ -139,32 +155,5 @@ public class TimeStepSimulator {
         for (Particle particle : particles) {
             particle.setOverlapped(false);
         }
-    }
-
-    private boolean areParticlesOverlapping(final Particle p1, final Particle p2) {
-        return p1.getPosition().distance(p2.getPosition()) < p1.getRadius() + p2.getRadius();
-    }
-
-    private boolean upperWallOverlapping(final Particle particle) {
-        return particle.getPosition().getY() + particle.getRadius() >= width;
-    }
-
-    private boolean bottomWallOverlapping(final Particle particle) {
-        return particle.getPosition().getY() - particle.getRadius() <= 0;
-    }
-
-    /**
-     * Returns the velocity for a particle that's not overlapping another.
-     * In this case, the `y` coordinate is always `0` as the particle just moves towards the exit point
-     * which is located at the right of the corridor.
-     *
-     * @param particle particle
-     *
-     * @return Velocity assuming no overlap with other particles
-     */
-    private Vector getVelocityNoOverlap(Particle particle) {
-        double x = maxVelocity * Math.pow((particle.getRadius() - minRadius) / (maxRadius - minRadius), beta);
-
-        return new Vector(x, 0);
     }
 }
