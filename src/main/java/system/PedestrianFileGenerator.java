@@ -15,7 +15,7 @@ import java.util.List;
 
 public class PedestrianFileGenerator implements FileGenerator {
     private static final String folder = "out/";
-    private static final double WALLS_RADIUS = 0.02;
+    private static final double WALLS_RADIUS = 0.01;
 
     private final BufferedWriter bw;
     private FileWriter fw;
