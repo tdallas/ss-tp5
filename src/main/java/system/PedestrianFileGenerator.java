@@ -15,7 +15,7 @@ import java.util.List;
 
 public class PedestrianFileGenerator implements FileGenerator {
     private static final String folder = "out/";
-    private static final double WALLS_RADIUS = 0.03;
+    private static final double WALLS_RADIUS = 0.02;
 
     private final BufferedWriter bw;
     private FileWriter fw;
@@ -26,8 +26,8 @@ public class PedestrianFileGenerator implements FileGenerator {
             if (!directory.exists()) {
                 directory.mkdir();
             }
-            FileWriter pw = new FileWriter(folder + filename + ".xyz");
-            pw.close();
+            FileWriter pw1 = new FileWriter(folder + filename + ".xyz");
+            pw1.close();
             this.fw = new FileWriter(folder + filename + ".xyz", true);
         } catch (IOException e) {
             e.printStackTrace();
@@ -36,11 +36,20 @@ public class PedestrianFileGenerator implements FileGenerator {
         writeWall(filename, hallLength, hallWidth);
     }
 
-    public void addToFile(List<Particle> particles, double timePassed) {
+    public void addToFile(List<Particle> particles, List<Particle> boundaryParticles, double timePassed) {
         try {
-            bw.write(particles.size() + "\n");
+            bw.write((particles.size() + boundaryParticles.size()) + "\n");
             bw.write("id xPosition yPosition xVelocity yVelocity radius timePassed\n");
             for (Particle particle : particles) {
+                bw.write(particle.getId() + " " +
+                        particle.getPosition().getX() + " " +
+                        particle.getPosition().getY() + " " +
+                        particle.getVelocity().getX() + " " +
+                        particle.getVelocity().getY() + " " +
+                        particle.getRadius() + " " +
+                        timePassed + "\n");
+            }
+            for (Particle particle : boundaryParticles) {
                 bw.write(particle.getId() + " " +
                         particle.getPosition().getX() + " " +
                         particle.getPosition().getY() + " " +
@@ -72,13 +81,13 @@ public class PedestrianFileGenerator implements FileGenerator {
 
             bw.write("xPosition yPosition radius\n");
             for (double x = 0; x < hallLength; x += WALLS_RADIUS) {
-                bw.write(x + " " + (hallWidth + WALLS_RADIUS) + " " + WALLS_RADIUS + "\n");
-                bw.write(x + " " + (-WALLS_RADIUS) + " " + WALLS_RADIUS + "\n");
+                bw.write(x + " " + (hallWidth) + " " + WALLS_RADIUS + "\n");
+                bw.write(x + " " + (0) + " " + WALLS_RADIUS + "\n");
                 n += 2;
             }
             for (double y = 0; y < hallWidth; y += WALLS_RADIUS) {
-                bw.write((hallLength + WALLS_RADIUS) + " " + y + " " + WALLS_RADIUS + "\n");
-                bw.write((-WALLS_RADIUS) + " " + y + " " + WALLS_RADIUS + "\n");
+                bw.write((hallLength) + " " + y + " " + WALLS_RADIUS + "\n");
+                bw.write((0) + " " + y + " " + WALLS_RADIUS + "\n");
                 n += 2;
             }
             bw.close();

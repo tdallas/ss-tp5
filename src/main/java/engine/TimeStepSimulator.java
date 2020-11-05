@@ -2,6 +2,7 @@ package engine;
 
 import engine.cutCondition.CutCondition;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class TimeStepSimulator {
@@ -38,13 +39,14 @@ public class TimeStepSimulator {
     }
 
     public void simulate() {
-        fileGenerator.addToFile(particles, time);
+        List<Particle> boundaryParticles = new LinkedList<>();
+        fileGenerator.addToFile(particles, boundaryParticles, time);
         while (!cutCondition.isFinished(particles, time)) {
             checkCollisions(particles);
-            moveParticles(particles);
+            moveParticles(particles, boundaryParticles);
             time += timeDelta;
             if (time >= timeToSave) {
-                fileGenerator.addToFile(particles, time);
+                fileGenerator.addToFile(particles, boundaryParticles, time);
                 timeToSave += saveTimeDelta;
             }
         }
@@ -102,19 +104,20 @@ public class TimeStepSimulator {
         }
     }
 
-    private void moveParticles(List<Particle> particles) {
+    private void moveParticles(List<Particle> particles, List<Particle> boundaryParticles) {
+        boundaryParticles.clear();
         for (Particle particle : particles) {
             //adjust radius
             if (particle.isOverlapped()) {
                 particle.setRadius(minRadius);
             } else if (particle.getRadius() < maxRadius) {
-                double newR = particle.getRadius() + (minRadius / (tau / timeDelta));
-                particle.setRadius(Math.min(newR, maxRadius));
+                double newRadius = particle.getRadius() + (minRadius / (tau / timeDelta));
+                particle.setRadius(Math.min(newRadius, maxRadius));
             }
             //set max velocity if not overlapped
             if (!particle.isOverlapped()) {
-                double xVelocity = maxVelocity * Math.pow((particle.getRadius() - minRadius) / (maxRadius - minRadius), beta);
-                particle.setVelocity(new Vector(xVelocity, 0));
+                double newXVelocity = maxVelocity * Math.pow((particle.getRadius() - minRadius) / (maxRadius - minRadius), beta);
+                particle.setVelocity(new Vector(newXVelocity, 0));
             }
             //set position
             // x(t + dt) = x(t) + v(t) * dt
@@ -123,9 +126,16 @@ public class TimeStepSimulator {
             if (newPosition.getX() >= hallLength) {
                 newPosition = new Vector(newPosition.getX() - hallLength, newPosition.getY());
             }
-
-            if (newPosition.getX() <= 0) {
+            else if (newPosition.getX() <= 0) {
                 newPosition = new Vector(newPosition.getX() + hallLength, newPosition.getY());
+            }
+            if(newPosition.getX() + particle.getRadius() >= hallLength){
+                Particle copiedParticle = new Particle(particle.getId() + particles.size(), new Vector(newPosition.getX() - hallLength, newPosition.getY()), particle.getVelocity(), particle.getRadius(), false);
+                boundaryParticles.add(copiedParticle);
+            }
+            else if(newPosition.getX() - particle.getRadius() <= 0){
+                Particle copiedParticle = new Particle(particle.getId() + particles.size(), new Vector(newPosition.getX() + hallLength, newPosition.getY()), particle.getVelocity(), particle.getRadius(), false);
+                boundaryParticles.add(copiedParticle);
             }
 
             particle.setPosition(newPosition);
