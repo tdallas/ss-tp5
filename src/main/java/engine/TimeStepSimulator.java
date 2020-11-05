@@ -12,23 +12,23 @@ public class TimeStepSimulator {
     private final List<Particle> particles;
     private double time;
     private double timeToSave;
+    private final double length;
     private final double width;
-    private final double height;
     private final double minRadius;
     private final double maxRadius;
     private final double maxVelocity;
     private final double beta;
     private final double tau;
 
-    public TimeStepSimulator(double timeDelta, double saveTimeDelta, CutCondition cutCondition, FileGenerator fileGenerator, List<Particle> particles, double width, double height, double minRadius, double maxRadius, double maxVelocity, double beta, double tau) {
+    public TimeStepSimulator(double timeDelta, double saveTimeDelta, CutCondition cutCondition, FileGenerator fileGenerator, List<Particle> particles, double length, double width, double minRadius, double maxRadius, double maxVelocity, double beta, double tau) {
         this.timeDelta = timeDelta;
         this.saveTimeDelta = saveTimeDelta;
         this.cutCondition = cutCondition;
         this.fileGenerator = fileGenerator;
         this.particles = particles;
         this.timeToSave = saveTimeDelta;
+        this.length = length;
         this.width = width;
-        this.height = height;
         this.minRadius = minRadius;
         this.maxRadius = maxRadius;
         this.maxVelocity = maxVelocity;
@@ -40,10 +40,10 @@ public class TimeStepSimulator {
     public void simulate() {
         fileGenerator.addToFile(particles, time);
         while (!cutCondition.isFinished(particles, time)) {
-            findContactsAndCalculateVe(particles, height);
+            findContactsAndCalculateVe(particles, width);
             adjustAllRadius(particles, minRadius, maxRadius);
             computeVd(particles);
-            calculateNewPositions(particles, width);
+            calculateNewPositions(particles, length);
             clearParticles(particles);
             time += timeDelta;
             if (time >= timeToSave) {
@@ -54,7 +54,7 @@ public class TimeStepSimulator {
         fileGenerator.closeFile();
     }
 
-    private void findContactsAndCalculateVe(List<Particle> particles, double height) {
+    private void findContactsAndCalculateVe(List<Particle> particles, double width) {
         for (Particle p1 : particles) {
 
             Vector escapeVector = new Vector(0, 0);
@@ -70,7 +70,7 @@ public class TimeStepSimulator {
 
             // Upper wall
             if (upperWallOverlapping(p1)) {
-                Vector upperWallVirtualPosition = new Vector(p1.getPosition().getX(), height);
+                Vector upperWallVirtualPosition = new Vector(p1.getPosition().getX(), width);
                 Vector wallEscapeVector1 = upperWallVirtualPosition.calculatePerpendicularUnitVector(p1.getPosition());
 
                 Vector wallEscapeVector = new Vector(wallEscapeVector1.getX(), -Math.abs(wallEscapeVector1.getY()));
@@ -118,17 +118,17 @@ public class TimeStepSimulator {
         }
     }
 
-    private void calculateNewPositions(List<Particle> particles, double width) {
+    private void calculateNewPositions(List<Particle> particles, double length) {
         for (Particle particle : particles) {
             // x(t + dt) = x(t) + v(t) * dt
             Vector newPosition = particle.getPosition().add(particle.getVelocity().multiply(timeDelta));
 
-            if (newPosition.getY() >= width) {
-                newPosition = new Vector(newPosition.getX() - width, newPosition.getY());
+            if (newPosition.getX() >= length) {
+                newPosition = new Vector(newPosition.getX() - length, newPosition.getY());
             }
 
             if (newPosition.getX() <= 0) {
-                newPosition = new Vector(newPosition.getX() + width, newPosition.getY());
+                newPosition = new Vector(newPosition.getX() + length, newPosition.getY());
             }
 
             particle.setPosition(newPosition);
@@ -146,7 +146,7 @@ public class TimeStepSimulator {
     }
 
     private boolean upperWallOverlapping(final Particle particle) {
-        return particle.getPosition().getY() + particle.getRadius() >= height;
+        return particle.getPosition().getY() + particle.getRadius() >= width;
     }
 
     private boolean bottomWallOverlapping(final Particle particle) {

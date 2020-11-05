@@ -10,8 +10,8 @@ import java.util.Random;
 public class PedestrianSystemGenerator {
     private int quantity;
     private int idCounter;
-    private final double xLength;
-    private final double yLength;
+    private final double length;
+    private final double width;
     private final double maxRadius;
     private final double minRadius;
     private final double maxVelocity;
@@ -21,11 +21,11 @@ public class PedestrianSystemGenerator {
 
     private static final int ALLOWED_ATTEMPTS = 50;
 
-    public PedestrianSystemGenerator(int quantity, Random random, double xLength, double yLength, double maxRadius, double minRadius, double maxVelocity, double beta) {
+    public PedestrianSystemGenerator(int quantity, Random random, double length, double width, double maxRadius, double minRadius, double maxVelocity, double beta) {
         this.idCounter = 0;
         this.quantity = quantity;
-        this.xLength = xLength;
-        this.yLength = yLength;
+        this.length = length;
+        this.width = width;
         this.maxRadius = maxRadius;
         this.minRadius = minRadius;
         this.maxVelocity = maxVelocity;
@@ -50,8 +50,8 @@ public class PedestrianSystemGenerator {
 
         while (particleOverlaps && attempts < ALLOWED_ATTEMPTS) {
             radius = generateRandomDouble(minRadius, maxRadius);
-            randomX = generateRandomDouble(radius, xLength - radius);
-            randomY = generateRandomDouble(radius, yLength - radius);
+            randomX = generateRandomDouble(radius, length - radius);
+            randomY = generateRandomDouble(radius, width - radius);
             checkedParticles = checkCorrectParticleDistribution(randomX, randomY, radius);
             if (checkedParticles == particles.size()) {
                 particleOverlaps = false;
