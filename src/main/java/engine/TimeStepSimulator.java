@@ -59,21 +59,19 @@ public class TimeStepSimulator {
             // Equation number 6
             for (Particle p2 : particles) {
                 if (!p1.equals(p2)) {
-                    if(p1.getPosition().distance(p2.getPosition()) < p1.getRadius() + p2.getRadius()) {
-                        escapeVector = escapeVector.add(p2.getPosition().calculatePerpendicularUnitVector(p1.getPosition()));
+                    if (p1.getPosition().distance(p2.getPosition()) < p1.getRadius() + p2.getRadius()) {
+                        escapeVector = p2.getPosition().perpendicularVector(p1.getPosition());
                         overlapping = true;
-                    }
-                    else if(p1.getPosition().getX() >= hallLength - maxRadius){
+                    } else if (p1.getPosition().getX() >= hallLength - maxRadius) {
                         Vector auxPosition = new Vector(p1.getPosition().getX() - hallLength, p1.getPosition().getY());
-                        if(auxPosition.distance(p2.getPosition()) < p1.getRadius() + p2.getRadius()) {
-                            escapeVector = escapeVector.add(p2.getPosition().calculatePerpendicularUnitVector(auxPosition));
+                        if (auxPosition.distance(p2.getPosition()) < p1.getRadius() + p2.getRadius()) {
+                            escapeVector = p2.getPosition().perpendicularVector(auxPosition);
                             overlapping = true;
                         }
-                    }
-                    else if(p1.getPosition().getX() <= maxRadius){
+                    } else if (p1.getPosition().getX() <= maxRadius) {
                         Vector auxPosition = new Vector(p1.getPosition().getX() + hallLength, p1.getPosition().getY());
-                        if(auxPosition.distance(p2.getPosition()) < p1.getRadius() + p2.getRadius()) {
-                            escapeVector = escapeVector.add(p2.getPosition().calculatePerpendicularUnitVector(auxPosition));
+                        if (auxPosition.distance(p2.getPosition()) < p1.getRadius() + p2.getRadius()) {
+                            escapeVector = p2.getPosition().perpendicularVector(auxPosition);
                             overlapping = true;
                         }
                     }
@@ -83,35 +81,28 @@ public class TimeStepSimulator {
             // Upper wall
             if (p1.getPosition().getY() + p1.getRadius() >= hallWidth) {
                 Vector upperWallVirtualPosition = new Vector(p1.getPosition().getX(), hallWidth);
-                Vector wallEscapeVector1 = upperWallVirtualPosition.calculatePerpendicularUnitVector(p1.getPosition());
-
-                Vector wallEscapeVector = new Vector(wallEscapeVector1.getX(), -Math.abs(wallEscapeVector1.getY()));
-
-                escapeVector = escapeVector.add(wallEscapeVector);
+                Vector wallEscapeVector = upperWallVirtualPosition.perpendicularVector(p1.getPosition());
+                escapeVector = new Vector(wallEscapeVector.getX(), -Math.abs(wallEscapeVector.getY()));
                 overlapping = true;
             }
 
             // Bottom wall
             if (p1.getPosition().getY() - p1.getRadius() <= 0) {
                 Vector bottomWallVirtualPosition = new Vector(p1.getPosition().getX(), 0);
-                Vector wallEscapeVector1 = bottomWallVirtualPosition.calculatePerpendicularUnitVector(p1.getPosition());
-
-                Vector wallEscapeVector = new Vector(wallEscapeVector1.getX(), Math.abs(wallEscapeVector1.getY()));
-
-                escapeVector = escapeVector.add(wallEscapeVector);
+                Vector wallEscapeVector = bottomWallVirtualPosition.perpendicularVector(p1.getPosition());
+                escapeVector = new Vector(wallEscapeVector.getX(), Math.abs(wallEscapeVector.getY()));
                 overlapping = true;
             }
 
-            escapeVector = escapeVector.normalize().multiply(maxVelocity);
-
             if (overlapping) {
+                escapeVector = escapeVector.normalize().multiply(maxVelocity);
                 p1.setVelocity(escapeVector);
                 p1.setOverlapped(true);
             }
         }
     }
 
-    private void moveParticles(List<Particle> particles){
+    private void moveParticles(List<Particle> particles) {
         for (Particle particle : particles) {
             //adjust radius
             if (particle.isOverlapped()) {

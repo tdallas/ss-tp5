@@ -71,15 +71,15 @@ public class PedestrianFileGenerator implements FileGenerator {
             BufferedWriter bw = new BufferedWriter(pw);
 
             bw.write("xPosition yPosition radius\n");
-            for(double x = 0; x < hallLength; x += WALLS_RADIUS){
+            for (double x = 0; x < hallLength; x += WALLS_RADIUS) {
                 bw.write(x + " " + (hallWidth + WALLS_RADIUS) + " " + WALLS_RADIUS + "\n");
                 bw.write(x + " " + (-WALLS_RADIUS) + " " + WALLS_RADIUS + "\n");
-                n+=2;
+                n += 2;
             }
-            for(double y = 0; y < hallWidth; y += WALLS_RADIUS){
+            for (double y = 0; y < hallWidth; y += WALLS_RADIUS) {
                 bw.write((hallLength + WALLS_RADIUS) + " " + y + " " + WALLS_RADIUS + "\n");
                 bw.write((-WALLS_RADIUS) + " " + y + " " + WALLS_RADIUS + "\n");
-                n+=2;
+                n += 2;
             }
             bw.close();
 

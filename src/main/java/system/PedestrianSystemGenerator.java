@@ -94,7 +94,7 @@ public class PedestrianSystemGenerator {
         return checkedParticles;
     }
 
-    public List<Particle> getParticles(){
+    public List<Particle> getParticles() {
         return particles;
     }
 }

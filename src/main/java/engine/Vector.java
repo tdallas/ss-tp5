@@ -46,14 +46,10 @@ public class Vector {
             return new Vector(0, 0);
         }
 
-        return this.multiply(1 / norm());
+        return this.multiply(1 / Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
     }
 
-    public double norm() {
-        return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-    }
-
-    public Vector calculatePerpendicularUnitVector(final Vector v) {
-        return v.subtract(this).normalize();
+    public Vector perpendicularVector(final Vector vector) {
+        return vector.subtract(this).normalize();
     }
 }
