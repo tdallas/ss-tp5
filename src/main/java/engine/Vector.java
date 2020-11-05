@@ -21,10 +21,6 @@ public class Vector {
         return new Vector(this.x * number, this.y * number);
     }
 
-    public Vector multiply(final Vector vector) {
-        return new Vector(this.x * vector.x, this.y * vector.y);
-    }
-
     public Vector divide(final double number) {
         return new Vector(this.x / number, this.y / number);
     }
@@ -33,20 +29,11 @@ public class Vector {
         return Math.hypot(this.x - vector.x, this.y - vector.y);
     }
 
-    public Vector changeSign() {
-        return new Vector(-x, -y);
-    }
-
-    public static Vector copy(final Vector vector) {
-        return new Vector(vector.x, vector.y);
-    }
-
     public Vector normalize() {
-        if (x == 0 && y == 0) {
+        if (this.x == 0 && this.y == 0) {
             return new Vector(0, 0);
         }
-
-        return this.multiply(1 / Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+        return this.divide(Math.hypot(this.x, this.y));
     }
 
     public Vector perpendicularVector(final Vector vector) {

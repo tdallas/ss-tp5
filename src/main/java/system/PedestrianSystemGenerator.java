@@ -19,8 +19,6 @@ public class PedestrianSystemGenerator {
     private final Random random;
     private final List<Particle> particles;
 
-    private static final int ALLOWED_ATTEMPTS = 50;
-
     public PedestrianSystemGenerator(int quantity, Random random, double length, double width, double maxRadius, double minRadius, double maxVelocity, double beta) {
         this.idCounter = 0;
         this.quantity = quantity;
@@ -43,30 +41,23 @@ public class PedestrianSystemGenerator {
     }
 
     private Particle createParticle() {
-        double randomX = 0, randomY = 0, randomAngle, xVelocity, radius = 0;
+        double xPosition = 0, yPosition = 0, xVelocity, radius = 0;
         int checkedParticles;
-        int attempts = 0;
         boolean particleOverlaps = true;
 
-        while (particleOverlaps && attempts < ALLOWED_ATTEMPTS) {
+        while (particleOverlaps) {
             radius = generateRandomDouble(minRadius, maxRadius);
-            randomX = generateRandomDouble(radius, length - radius);
-            randomY = generateRandomDouble(radius, width - radius);
-            checkedParticles = checkCorrectParticleDistribution(randomX, randomY, radius);
+            xPosition = generateRandomDouble(radius, length - radius);
+            yPosition = generateRandomDouble(radius, width - radius);
+            checkedParticles = checkCorrectParticleDistribution(xPosition, yPosition, radius);
             if (checkedParticles == particles.size()) {
                 particleOverlaps = false;
             }
-
-            attempts++;
-        }
-
-        if (particleOverlaps) {
-            throw new IllegalArgumentException("Could not generate particle in less attempts than allowed.");
         }
 
         xVelocity = maxVelocity * Math.pow((radius - minRadius) / (maxRadius - minRadius), beta);
 
-        return new Particle(idCounter++, new Vector(randomX, randomY), new Vector(xVelocity, 0), radius, false);
+        return new Particle(idCounter++, new Vector(xPosition, yPosition), new Vector(xVelocity, 0), radius, false);
     }
 
     private double generateRandomDouble(final double min, final double max) {
