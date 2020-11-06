@@ -12,8 +12,6 @@ public class TimeStepSimulator {
     private final FileGenerator fileGenerator;
     private final List<Particle> particles;
     private final List<Particle> boundaryParticles;
-    private double time;
-    private double timeToSave;
     private final double hallLength;
     private final double hallWidth;
     private final double minRadius;
@@ -21,6 +19,8 @@ public class TimeStepSimulator {
     private final double maxVelocity;
     private final double beta;
     private final double tau;
+    private double time;
+    private double timeToSave;
 
     public TimeStepSimulator(double timeDelta, double saveTimeDelta, CutCondition cutCondition, FileGenerator fileGenerator, List<Particle> particles, double hallLength, double hallWidth, double minRadius, double maxRadius, double maxVelocity, double beta, double tau) {
         this.timeDelta = timeDelta;
@@ -43,8 +43,8 @@ public class TimeStepSimulator {
     public void simulate() {
         fileGenerator.addToFile(particles, boundaryParticles, time);
         while (!cutCondition.isFinished(particles, time)) {
-            checkCollisions(particles);
-            moveParticles(particles, boundaryParticles);
+            checkCollisionsAndEscapeVelocities(particles);
+            changeRadiusAndMoveParticles(particles, boundaryParticles);
             time += timeDelta;
             if (time >= timeToSave) {
                 fileGenerator.addToFile(particles, boundaryParticles, time);
@@ -54,24 +54,27 @@ public class TimeStepSimulator {
         fileGenerator.closeFile();
     }
 
-    private void checkCollisions(List<Particle> particles) {
+    private void checkCollisionsAndEscapeVelocities(List<Particle> particles) {
         for (Particle p1 : particles) {
             Vector escapeVelocity = new Vector(0, 0);
             boolean overlappedParticle = false;
 
-            // Other particles
             for (Particle p2 : particles) {
+                // Other particles
                 if (!p1.equals(p2)) {
                     if (p1.getPosition().distance(p2.getPosition()) < p1.getRadius() + p2.getRadius()) {
+                        // Check if it's near another particle
                         escapeVelocity = escapeVelocity.add(p2.getPosition().perpendicularVector(p1.getPosition()));
                         overlappedParticle = true;
                     } else if (p1.getPosition().getX() >= hallLength - maxRadius) {
+                        // Check if it's passing the right border
                         Vector auxPosition = new Vector(p1.getPosition().getX() - hallLength, p1.getPosition().getY());
                         if (auxPosition.distance(p2.getPosition()) < p1.getRadius() + p2.getRadius()) {
                             escapeVelocity = escapeVelocity.add(p2.getPosition().perpendicularVector(auxPosition));
                             overlappedParticle = true;
                         }
                     } else if (p1.getPosition().getX() <= maxRadius) {
+                        // Check if it's passing the left border
                         Vector auxPosition = new Vector(p1.getPosition().getX() + hallLength, p1.getPosition().getY());
                         if (auxPosition.distance(p2.getPosition()) < p1.getRadius() + p2.getRadius()) {
                             escapeVelocity = escapeVelocity.add(p2.getPosition().perpendicularVector(auxPosition));
@@ -83,11 +86,11 @@ public class TimeStepSimulator {
 
 
             if (p1.getPosition().getY() + p1.getRadius() >= hallWidth) {
-                // Upper wall
+                // Check if it's near upper wall
                 escapeVelocity = escapeVelocity.add(new Vector(0, -1));
                 overlappedParticle = true;
             } else if (p1.getPosition().getY() - p1.getRadius() <= 0) {
-                // Bottom wall
+                // Check if it's near lower wall
                 escapeVelocity = escapeVelocity.add(new Vector(0, 1));
                 overlappedParticle = true;
             }
@@ -100,11 +103,11 @@ public class TimeStepSimulator {
         }
     }
 
-    private void moveParticles(List<Particle> particles, List<Particle> boundaryParticles) {
+    private void changeRadiusAndMoveParticles(List<Particle> particles, List<Particle> boundaryParticles) {
         boundaryParticles.clear();
         for (Particle particle : particles) {
 
-            // adjust radius
+            // Change radius
             if (particle.isOverlapped()) {
                 particle.setRadius(minRadius);
             } else if (particle.getRadius() < maxRadius) {
@@ -112,20 +115,20 @@ public class TimeStepSimulator {
                 particle.setRadius(Math.min(newRadius, maxRadius));
             }
 
-            // set max velocity if not overlapped
+            // Change velocity if not overlapped with new radius
             if (!particle.isOverlapped()) {
                 double newXVelocity = maxVelocity * Math.pow((particle.getRadius() - minRadius) / (maxRadius - minRadius), beta);
                 particle.setVelocity(new Vector(newXVelocity, 0));
             }
 
-            // set position x(t + dt) = x(t) + v(t) * dt
+            // Set position with new velocity
             Vector newPosition = particle.getPosition().add(particle.getVelocity().multiply(timeDelta));
             if (newPosition.getX() >= hallLength) {
                 newPosition = new Vector(newPosition.getX() - hallLength, newPosition.getY());
             } else if (newPosition.getX() <= 0) {
                 newPosition = new Vector(newPosition.getX() + hallLength, newPosition.getY());
             }
-            // check if needs to add copy of particle to boundaryParticles
+            // Check if needs to add copy of particle to boundaryParticles. This is only for animation that's why it's not included on the list particles
             if (newPosition.getX() + particle.getRadius() >= hallLength) {
                 Particle copiedParticle = new Particle(particle.getId() + particles.size(), new Vector(newPosition.getX() - hallLength, newPosition.getY()), particle.getVelocity(), particle.getRadius(), false);
                 boundaryParticles.add(copiedParticle);

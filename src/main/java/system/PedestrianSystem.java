@@ -17,6 +17,8 @@ public class PedestrianSystem {
     private static final double TAU_1 = 0.5; // s
     private static final double TIME_DELTA_1 = 0.04;  // s        r_min/2*v_max
     private static final double SAVE_TIME_DELTA_1 = TIME_DELTA_1; // s
+    private static final int PARTICLES_QUANTITY_1 = 100;
+    private static final String FILENAME_1 = "output-p1" ;
 
     // Parameters 2
     private static final double MIN_RADIUS_2 = 0.10; // m
@@ -29,23 +31,37 @@ public class PedestrianSystem {
     private static final double TAU_2 = 0.5; // s
     private static final double TIME_DELTA_2 = 0.04;  // s        r_min/2*v_max
     private static final double SAVE_TIME_DELTA_2 = TIME_DELTA_2; // s
+    private static final int PARTICLES_QUANTITY_2 = 100;
+    private static final String FILENAME_2 = "output-p2" ;
 
     private static final double SIMULATION_TIME = 50; // s
-    private static final int PARTICLES_QUANTITY = 100;
-    private static final String FILENAME = "output100" ;
 
-    public static void runSimulation(String fileName, int particlesQuantity, double timeDelta, double saveTimeDelta, double simulationTime, double minRadius, double maxRadius, double maxVelocity, double length, double width, double beta, double tau, boolean writeBoundaryParticles, boolean writeWalls) {
-        Random random = new Random();
+    public static void runSimulation(String fileName, int particlesQuantity, double timeDelta, double saveTimeDelta, double simulationTime, double minRadius, double maxRadius, double maxVelocity, double length, double width, double beta, double tau, boolean writeBoundaryParticles, boolean writeWalls, Long seed) {
+        Random random;
+        if (seed == null) {
+            random = new Random();
+            seed = random.nextLong();
+            random.setSeed(seed);
+        } else {
+            random = new Random(seed);
+        }
+        System.out.println("Using seed: " + seed);
+        System.out.println("Creating particles...");
+        long startTime = System.currentTimeMillis();
         PedestrianSystemGenerator pedestrianSystemGenerator = new PedestrianSystemGenerator(particlesQuantity, random, length, width, maxRadius, minRadius, maxVelocity, beta);
+        System.out.println("Particles created in: " + (System.currentTimeMillis() - startTime) + "ms");
         PedestrianFileGenerator pedestrianFileGenerator = new PedestrianFileGenerator(fileName, length, width, writeBoundaryParticles, writeWalls);
         TimeCutCondition timeCutCondition = new TimeCutCondition(simulationTime);
         TimeStepSimulator timeStepSimulator = new TimeStepSimulator(timeDelta, saveTimeDelta, timeCutCondition, pedestrianFileGenerator, pedestrianSystemGenerator.getParticles(), length, width, minRadius, maxRadius, maxVelocity, beta, tau);
+        System.out.println("Starting simulation...");
+        startTime = System.currentTimeMillis();
         timeStepSimulator.simulate();
+        System.out.println("Simulation finished in: " + (System.currentTimeMillis() - startTime) + "ms");
     }
 
     public static void runSimulationParameters1() {
-        runSimulation(FILENAME,
-                PARTICLES_QUANTITY,
+        runSimulation(FILENAME_1,
+                PARTICLES_QUANTITY_1,
                 TIME_DELTA_1,
                 SAVE_TIME_DELTA_1,
                 SIMULATION_TIME,
@@ -57,12 +73,13 @@ public class PedestrianSystem {
                 BETA_1,
                 TAU_1,
                 true,
-                true);
+                true,
+                null);
     }
 
     public static void runSimulationParameters2() {
-        runSimulation(FILENAME,
-                PARTICLES_QUANTITY,
+        runSimulation(FILENAME_2,
+                PARTICLES_QUANTITY_2,
                 TIME_DELTA_2,
                 SAVE_TIME_DELTA_2,
                 SIMULATION_TIME,
@@ -74,7 +91,8 @@ public class PedestrianSystem {
                 BETA_2,
                 TAU_2,
                 true,
-                true);
+                true,
+                null);
     }
 
     public static void runSimulationsForFundamentalDiagram(int maxParticles, int particlesJump, double timeDelta, double saveTimeDelta, double simulationTime, double minRadius, double maxRadius, double maxVelocity, double widthMultiplier, double beta, double tau) {
@@ -96,11 +114,14 @@ public class PedestrianSystem {
                     beta,
                     tau,
                     false,
-                    false);
+                    false,
+                    null);
         }
     }
 
     public static void runFundamentalDiagrams() {
         runSimulationsForFundamentalDiagram(160, 5, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 3, BETA_1, TAU_1);
+        runSimulationsForFundamentalDiagram(300, 10, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 5, BETA_1, TAU_1);
+        runSimulationsForFundamentalDiagram(400, 20, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 7, BETA_1, TAU_1);
     }
 }

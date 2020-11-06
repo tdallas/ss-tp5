@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Random;
 
 public class PedestrianSystemGenerator {
-    private int quantity;
-    private int idCounter;
     private final double length;
     private final double width;
     private final double maxRadius;
@@ -18,10 +16,14 @@ public class PedestrianSystemGenerator {
     private final double beta;
     private final Random random;
     private final List<Particle> particles;
+    private final int totalQuantity;
+    private int particlesCreated;
+    private int idCounter;
 
-    public PedestrianSystemGenerator(int quantity, Random random, double length, double width, double maxRadius, double minRadius, double maxVelocity, double beta) {
+    public PedestrianSystemGenerator(int totalQuantity, Random random, double length, double width, double maxRadius, double minRadius, double maxVelocity, double beta) {
         this.idCounter = 0;
-        this.quantity = quantity;
+        this.particlesCreated = 0;
+        this.totalQuantity = totalQuantity;
         this.length = length;
         this.width = width;
         this.maxRadius = maxRadius;
@@ -34,9 +36,9 @@ public class PedestrianSystemGenerator {
     }
 
     private void generateRandomParticles() {
-        while (quantity > 0) {
+        while (particlesCreated < totalQuantity) {
             particles.add(createParticle());
-            quantity--;
+            particlesCreated++;
         }
     }
 

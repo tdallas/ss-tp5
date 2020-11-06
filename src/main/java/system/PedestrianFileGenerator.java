@@ -18,8 +18,8 @@ public class PedestrianFileGenerator implements FileGenerator {
     private static final double WALLS_RADIUS = 0.01;
 
     private final BufferedWriter bw;
-    private FileWriter fw;
     private final boolean writeBoundaryParticles;
+    private FileWriter fw;
 
     public PedestrianFileGenerator(String filename, double hallLength, double hallWidth, boolean writeBoundaryParticles, boolean writeWalls) {
         try {
