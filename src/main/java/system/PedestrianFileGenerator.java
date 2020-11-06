@@ -19,8 +19,9 @@ public class PedestrianFileGenerator implements FileGenerator {
 
     private final BufferedWriter bw;
     private FileWriter fw;
+    private final boolean writeBoundaryParticles;
 
-    public PedestrianFileGenerator(String filename, double hallLength, double hallWidth) {
+    public PedestrianFileGenerator(String filename, double hallLength, double hallWidth, boolean writeBoundaryParticles, boolean writeWalls) {
         try {
             File directory = new File(folder);
             if (!directory.exists()) {
@@ -33,12 +34,20 @@ public class PedestrianFileGenerator implements FileGenerator {
             e.printStackTrace();
         }
         this.bw = new BufferedWriter(fw);
-        writeWall(filename, hallLength, hallWidth);
+        this.writeBoundaryParticles = writeBoundaryParticles;
+        if(writeWalls) {
+            writeWall(filename, hallLength, hallWidth);
+        }
     }
 
     public void addToFile(List<Particle> particles, List<Particle> boundaryParticles, double timePassed) {
         try {
-            bw.write((particles.size() + boundaryParticles.size()) + "\n");
+            if(writeBoundaryParticles) {
+                bw.write((particles.size() + boundaryParticles.size()) + "\n");
+            }
+            else{
+                bw.write(particles.size() + "\n");
+            }
             bw.write("id xPosition yPosition xVelocity yVelocity radius timePassed\n");
             for (Particle particle : particles) {
                 bw.write(particle.getId() + " " +
@@ -49,14 +58,16 @@ public class PedestrianFileGenerator implements FileGenerator {
                         particle.getRadius() + " " +
                         timePassed + "\n");
             }
-            for (Particle particle : boundaryParticles) {
-                bw.write(particle.getId() + " " +
-                        particle.getPosition().getX() + " " +
-                        particle.getPosition().getY() + " " +
-                        particle.getVelocity().getX() + " " +
-                        particle.getVelocity().getY() + " " +
-                        particle.getRadius() + " " +
-                        timePassed + "\n");
+            if(writeBoundaryParticles) {
+                for (Particle particle : boundaryParticles) {
+                    bw.write(particle.getId() + " " +
+                            particle.getPosition().getX() + " " +
+                            particle.getPosition().getY() + " " +
+                            particle.getVelocity().getX() + " " +
+                            particle.getVelocity().getY() + " " +
+                            particle.getRadius() + " " +
+                            timePassed + "\n");
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
