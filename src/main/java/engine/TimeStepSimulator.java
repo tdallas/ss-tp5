@@ -56,46 +56,45 @@ public class TimeStepSimulator {
 
     private void checkCollisions(List<Particle> particles) {
         for (Particle p1 : particles) {
-            Vector velocityDirection = new Vector(0, 0);
+            Vector escapeVelocity = new Vector(0, 0);
             boolean overlappedParticle = false;
 
             // Other particles
             for (Particle p2 : particles) {
                 if (!p1.equals(p2)) {
                     if (p1.getPosition().distance(p2.getPosition()) < p1.getRadius() + p2.getRadius()) {
-                        velocityDirection = p2.getPosition().perpendicularVector(p1.getPosition());
+                        escapeVelocity = escapeVelocity.add(p2.getPosition().perpendicularVector(p1.getPosition()));
                         overlappedParticle = true;
                     } else if (p1.getPosition().getX() >= hallLength - maxRadius) {
                         Vector auxPosition = new Vector(p1.getPosition().getX() - hallLength, p1.getPosition().getY());
                         if (auxPosition.distance(p2.getPosition()) < p1.getRadius() + p2.getRadius()) {
-                            velocityDirection = p2.getPosition().perpendicularVector(auxPosition);
+                            escapeVelocity = escapeVelocity.add(p2.getPosition().perpendicularVector(auxPosition));
                             overlappedParticle = true;
                         }
                     } else if (p1.getPosition().getX() <= maxRadius) {
                         Vector auxPosition = new Vector(p1.getPosition().getX() + hallLength, p1.getPosition().getY());
                         if (auxPosition.distance(p2.getPosition()) < p1.getRadius() + p2.getRadius()) {
-                            velocityDirection = p2.getPosition().perpendicularVector(auxPosition);
+                            escapeVelocity = escapeVelocity.add(p2.getPosition().perpendicularVector(auxPosition));
                             overlappedParticle = true;
                         }
                     }
                 }
             }
 
-            // Upper wall
-            if (p1.getPosition().getY() + p1.getRadius() >= hallWidth) {
-                velocityDirection = new Vector(0, -1);
-                overlappedParticle = true;
-            }
 
-            // Bottom wall
-            if (p1.getPosition().getY() - p1.getRadius() <= 0) {
-                velocityDirection = new Vector(0, 1);
+            if (p1.getPosition().getY() + p1.getRadius() >= hallWidth) {
+                // Upper wall
+                escapeVelocity = escapeVelocity.add(new Vector(0, -1));
+                overlappedParticle = true;
+            } else if (p1.getPosition().getY() - p1.getRadius() <= 0) {
+                // Bottom wall
+                escapeVelocity = escapeVelocity.add(new Vector(0, 1));
                 overlappedParticle = true;
             }
 
             if (overlappedParticle) {
-                velocityDirection = velocityDirection.multiply(maxVelocity);
-                p1.setVelocity(velocityDirection);
+                escapeVelocity = escapeVelocity.normalize().multiply(maxVelocity);
+                p1.setVelocity(escapeVelocity);
                 p1.setOverlapped(true);
             }
         }

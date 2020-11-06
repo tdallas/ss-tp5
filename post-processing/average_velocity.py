@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from parser_xyz import XYZParser
 
 
-file = 'out/output.xyz'
+file = 'out/width-7-particles-400.xyz'
 parsed_data = XYZParser(file)
 average_velocities = []
 time = []

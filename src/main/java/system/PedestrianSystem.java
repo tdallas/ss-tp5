@@ -15,6 +15,8 @@ public class PedestrianSystem {
     private static final double WIDTH_1 = 5 * (MAX_RADIUS_1 + MIN_RADIUS_1);  // m
     private static final double BETA_1 = 0.9;
     private static final double TAU_1 = 0.5; // s
+    private static final double TIME_DELTA_1 = 0.04;  // s        r_min/2*v_max
+    private static final double SAVE_TIME_DELTA_1 = TIME_DELTA_1; // s
 
     // Parameters 2
     private static final double MIN_RADIUS_2 = 0.10; // m
@@ -25,43 +27,80 @@ public class PedestrianSystem {
     private static final double WIDTH_2 = 5 * (MAX_RADIUS_2 + MIN_RADIUS_2);  // m
     private static final double BETA_2 = 0.9;
     private static final double TAU_2 = 0.5; // s
+    private static final double TIME_DELTA_2 = 0.04;  // s        r_min/2*v_max
+    private static final double SAVE_TIME_DELTA_2 = TIME_DELTA_2; // s
 
-    private static final double TIME_DELTA = 0.01;  // s
-    private static final double SAVE_TIME_DELTA = 0.01; // s
-    private static final double SIMULATION_TIME = 25; // s
-
+    private static final double SIMULATION_TIME = 50; // s
     private static final int PARTICLES_QUANTITY = 100;
-    private static final String FILENAME = "output";
+    private static final String FILENAME = "output100" ;
 
-    public static void runSimulation() {
+    public static void runSimulation(String fileName, int particlesQuantity, double timeDelta, double saveTimeDelta, double simulationTime, double minRadius, double maxRadius, double maxVelocity, double length, double width, double beta, double tau, boolean writeBoundaryParticles, boolean writeWalls) {
         Random random = new Random();
-        PedestrianSystemGenerator pedestrianSystemGenerator = new PedestrianSystemGenerator(PARTICLES_QUANTITY, random, LENGTH_1, WIDTH_1, MAX_RADIUS_1, MIN_RADIUS_1, MAX_VELOCITY_1, BETA_1);
-        PedestrianFileGenerator pedestrianFileGenerator = new PedestrianFileGenerator(FILENAME, LENGTH_1, WIDTH_1, true, true);
-        TimeCutCondition timeCutCondition = new TimeCutCondition(SIMULATION_TIME);
-        TimeStepSimulator timeStepSimulator = new TimeStepSimulator(TIME_DELTA, SAVE_TIME_DELTA, timeCutCondition, pedestrianFileGenerator, pedestrianSystemGenerator.getParticles(), LENGTH_1, WIDTH_1, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, BETA_1, TAU_1);
+        PedestrianSystemGenerator pedestrianSystemGenerator = new PedestrianSystemGenerator(particlesQuantity, random, length, width, maxRadius, minRadius, maxVelocity, beta);
+        PedestrianFileGenerator pedestrianFileGenerator = new PedestrianFileGenerator(fileName, length, width, writeBoundaryParticles, writeWalls);
+        TimeCutCondition timeCutCondition = new TimeCutCondition(simulationTime);
+        TimeStepSimulator timeStepSimulator = new TimeStepSimulator(timeDelta, saveTimeDelta, timeCutCondition, pedestrianFileGenerator, pedestrianSystemGenerator.getParticles(), length, width, minRadius, maxRadius, maxVelocity, beta, tau);
         timeStepSimulator.simulate();
     }
 
-    public static void runSimulationsForFundamentalDiagram(int maxParticles, int particlesJump, int repetitions, double minRadius, double maxRadius, double maxVelocity, double widthMultiplier, double beta, double tau) {
+    public static void runSimulationParameters1() {
+        runSimulation(FILENAME,
+                PARTICLES_QUANTITY,
+                TIME_DELTA_1,
+                SAVE_TIME_DELTA_1,
+                SIMULATION_TIME,
+                MIN_RADIUS_1,
+                MAX_RADIUS_1,
+                MAX_VELOCITY_1,
+                LENGTH_1,
+                WIDTH_1,
+                BETA_1,
+                TAU_1,
+                true,
+                true);
+    }
+
+    public static void runSimulationParameters2() {
+        runSimulation(FILENAME,
+                PARTICLES_QUANTITY,
+                TIME_DELTA_2,
+                SAVE_TIME_DELTA_2,
+                SIMULATION_TIME,
+                MIN_RADIUS_2,
+                MAX_RADIUS_2,
+                MAX_VELOCITY_2,
+                LENGTH_2,
+                WIDTH_2,
+                BETA_2,
+                TAU_2,
+                true,
+                true);
+    }
+
+    public static void runSimulationsForFundamentalDiagram(int maxParticles, int particlesJump, double timeDelta, double saveTimeDelta, double simulationTime, double minRadius, double maxRadius, double maxVelocity, double widthMultiplier, double beta, double tau) {
         double length = 4 * 2 * Math.PI;  // m
         double width = widthMultiplier * (maxRadius + minRadius);  // m
-        Random random = new Random();
         System.out.println("Starting simulations for Fundamental Diagram with width: " + widthMultiplier);
         for(int particlesQuantity = particlesJump; particlesQuantity <= maxParticles; particlesQuantity += particlesJump) {
-            System.out.print(particlesQuantity + " particles:");
-            for(int repetition = 1; repetition <= repetitions; repetition++) {
-                System.out.print(" " + repetition);
-                PedestrianSystemGenerator pedestrianSystemGenerator = new PedestrianSystemGenerator(particlesQuantity, random, length, width, maxRadius, minRadius, maxVelocity, beta);
-                PedestrianFileGenerator pedestrianFileGenerator = new PedestrianFileGenerator("width-" + (int)widthMultiplier + "-particles-" + particlesQuantity + "-repetition-" + repetition , length, width, false, false);
-                TimeCutCondition timeCutCondition = new TimeCutCondition(SIMULATION_TIME);
-                TimeStepSimulator timeStepSimulator = new TimeStepSimulator(TIME_DELTA, SAVE_TIME_DELTA, timeCutCondition, pedestrianFileGenerator, pedestrianSystemGenerator.getParticles(), length, width, minRadius, maxRadius, maxVelocity, beta, tau);
-                timeStepSimulator.simulate();
-            }
-            System.out.println();
+            System.out.println("Simulating " + particlesQuantity + " particles.");
+            runSimulation("width-" + (int)widthMultiplier + "-particles-" + particlesQuantity,
+                    particlesQuantity,
+                    timeDelta,
+                    saveTimeDelta,
+                    simulationTime,
+                    minRadius,
+                    maxRadius,
+                    maxVelocity,
+                    length,
+                    width,
+                    beta,
+                    tau,
+                    false,
+                    false);
         }
     }
 
     public static void runFundamentalDiagrams() {
-        runSimulationsForFundamentalDiagram(100, 5, 5, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 3, BETA_1, TAU_1);
+        runSimulationsForFundamentalDiagram(160, 5, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 3, BETA_1, TAU_1);
     }
 }

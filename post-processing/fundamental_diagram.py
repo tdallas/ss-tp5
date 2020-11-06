@@ -11,30 +11,27 @@ length = radius * 2 * math.pi
 width_multiplier = 3
 width = width_multiplier * (max_radius + min_radius)
 area = length * width
-max_particles = 100
-particles_jump = 5
-repetitions = 5
+max_particles = 160
+particles_jump = 10
 
 average_velocities = []
 average_velocities_error_bars = []
 densities = []
 
-for particles_quantity in range(5, max_particles + 1, particles_jump):
-    print(str(particles_quantity) + ' particles:', end=" ")
-    velocities = []
-    for repetition in range(1, repetitions + 1):
-        print(str(repetition), end=" ")
-        sys.stdout.flush()
-        file = "out/width-{}-particles-{}-repetition-{}.xyz".format(width_multiplier, particles_quantity, repetition)
-        parsed_data = XYZParser(file)
-        for iteration in parsed_data.get_output():
-            velocities_repetition = []
-            for particle in iteration:
-                velocities_repetition.append(particle.get_velocity())
-        velocities.append(np.average(velocities_repetition))
-    print()
-    average_velocities.append(np.average(velocities))
-    average_velocities_error_bars.append(np.std(velocities))
+for particles_quantity in range(particles_jump, max_particles + 1, particles_jump):
+    print(str(particles_quantity) + ' particles')
+    file = "out/width-{}-particles-{}.xyz".format(width_multiplier, particles_quantity)
+    parsed_data = XYZParser(file)
+    output = parsed_data.get_output()
+    average_velocities_iteration = []
+    for i in range(249, 1250):
+        iteration = output[i]
+        velocities = []
+        for particle in iteration:
+            velocities.append(particle.get_velocity())
+        average_velocities_iteration.append(np.average(velocities))
+    average_velocities.append(np.average(average_velocities_iteration))
+    average_velocities_error_bars.append(np.std(average_velocities_iteration))
     densities.append(particles_quantity / area)
 
 
