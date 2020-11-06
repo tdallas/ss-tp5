@@ -121,7 +121,10 @@ public class PedestrianSystem {
 
     public static void runFundamentalDiagrams() {
         runSimulationsForFundamentalDiagram("p1", 200, 5, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 3, BETA_1, TAU_1);
+        runSimulationsForFundamentalDiagram("p1", 250, 5, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 4, BETA_1, TAU_1);
         runSimulationsForFundamentalDiagram("p1", 400, 10, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 5, BETA_1, TAU_1);
+        runSimulationsForFundamentalDiagram("p1", 460, 10, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 6, BETA_1, TAU_1);
         runSimulationsForFundamentalDiagram("p1", 500, 20, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 7, BETA_1, TAU_1);
+        runSimulationsForFundamentalDiagram("p1", 560, 20, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 8, BETA_1, TAU_1);
     }
 }
