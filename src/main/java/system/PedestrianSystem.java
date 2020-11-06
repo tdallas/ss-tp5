@@ -15,7 +15,7 @@ public class PedestrianSystem {
     private static final double WIDTH_1 = 5 * (MAX_RADIUS_1 + MIN_RADIUS_1);  // m
     private static final double BETA_1 = 0.9;
     private static final double TAU_1 = 0.5; // s
-    private static final double TIME_DELTA_1 = 0.04;  // s        r_min/2*v_max
+    private static final double TIME_DELTA_1 = 0.02;  // s        r_min/2*v_max
     private static final double SAVE_TIME_DELTA_1 = TIME_DELTA_1; // s
     private static final int PARTICLES_QUANTITY_1 = 100;
     private static final String FILENAME_1 = "output-p1" ;
@@ -29,12 +29,12 @@ public class PedestrianSystem {
     private static final double WIDTH_2 = 5 * (MAX_RADIUS_2 + MIN_RADIUS_2);  // m
     private static final double BETA_2 = 0.9;
     private static final double TAU_2 = 0.5; // s
-    private static final double TIME_DELTA_2 = 0.04;  // s        r_min/2*v_max
+    private static final double TIME_DELTA_2 = 0.02;  // s        r_min/2*v_max
     private static final double SAVE_TIME_DELTA_2 = TIME_DELTA_2; // s
     private static final int PARTICLES_QUANTITY_2 = 100;
     private static final String FILENAME_2 = "output-p2" ;
 
-    private static final double SIMULATION_TIME = 50; // s
+    private static final double SIMULATION_TIME = 30; // s
 
     public static void runSimulation(String fileName, int particlesQuantity, double timeDelta, double saveTimeDelta, double simulationTime, double minRadius, double maxRadius, double maxVelocity, double length, double width, double beta, double tau, boolean writeBoundaryParticles, boolean writeWalls, Long seed) {
         Random random;
@@ -95,13 +95,13 @@ public class PedestrianSystem {
                 null);
     }
 
-    public static void runSimulationsForFundamentalDiagram(int maxParticles, int particlesJump, double timeDelta, double saveTimeDelta, double simulationTime, double minRadius, double maxRadius, double maxVelocity, double widthMultiplier, double beta, double tau) {
+    public static void runSimulationsForFundamentalDiagram(String parameters, int maxParticles, int particlesJump, double timeDelta, double saveTimeDelta, double simulationTime, double minRadius, double maxRadius, double maxVelocity, double widthMultiplier, double beta, double tau) {
         double length = 4 * 2 * Math.PI;  // m
         double width = widthMultiplier * (maxRadius + minRadius);  // m
         System.out.println("Starting simulations for Fundamental Diagram with width: " + widthMultiplier);
         for(int particlesQuantity = particlesJump; particlesQuantity <= maxParticles; particlesQuantity += particlesJump) {
             System.out.println("Simulating " + particlesQuantity + " particles.");
-            runSimulation("width-" + (int)widthMultiplier + "-particles-" + particlesQuantity,
+            runSimulation(parameters + "-width-" + (int)widthMultiplier + "-particles-" + particlesQuantity,
                     particlesQuantity,
                     timeDelta,
                     saveTimeDelta,
@@ -120,8 +120,8 @@ public class PedestrianSystem {
     }
 
     public static void runFundamentalDiagrams() {
-        runSimulationsForFundamentalDiagram(160, 5, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 3, BETA_1, TAU_1);
-        runSimulationsForFundamentalDiagram(300, 10, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 5, BETA_1, TAU_1);
-        runSimulationsForFundamentalDiagram(400, 20, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 7, BETA_1, TAU_1);
+        runSimulationsForFundamentalDiagram("p1", 200, 5, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 3, BETA_1, TAU_1);
+        runSimulationsForFundamentalDiagram("p1", 400, 10, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 5, BETA_1, TAU_1);
+        runSimulationsForFundamentalDiagram("p1", 500, 20, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 7, BETA_1, TAU_1);
     }
 }

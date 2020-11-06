@@ -17,8 +17,12 @@ public class PedestrianSystemGenerator {
     private final Random random;
     private final List<Particle> particles;
     private final int totalQuantity;
+    private final double density;
     private int particlesCreated;
     private int idCounter;
+
+    private static final double MAX_DENSITY = 7.5;
+
 
     public PedestrianSystemGenerator(int totalQuantity, Random random, double length, double width, double maxRadius, double minRadius, double maxVelocity, double beta) {
         this.idCounter = 0;
@@ -31,6 +35,10 @@ public class PedestrianSystemGenerator {
         this.maxVelocity = maxVelocity;
         this.beta = beta;
         this.random = random;
+        this.density = totalQuantity / (length * width);
+        if (density > MAX_DENSITY) {
+            throw new IllegalArgumentException("Could not generate this many particles for this area.");
+        }
         this.particles = new ArrayList<>();
         generateRandomParticles();
     }
@@ -48,7 +56,7 @@ public class PedestrianSystemGenerator {
         boolean particleOverlaps = true;
 
         while (particleOverlaps) {
-            radius = generateRandomDouble(minRadius, maxRadius);
+            radius = generateRandomDouble(minRadius, maxRadius - (density / MAX_DENSITY) * (maxRadius - minRadius));
             xPosition = generateRandomDouble(radius, length - radius);
             yPosition = generateRandomDouble(radius, width - radius);
             checkedParticles = checkCorrectParticleDistribution(xPosition, yPosition, radius);
