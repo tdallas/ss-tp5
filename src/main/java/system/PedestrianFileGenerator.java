@@ -18,10 +18,9 @@ public class PedestrianFileGenerator implements FileGenerator {
     private static final double WALLS_RADIUS = 0.01;
 
     private final BufferedWriter bw;
-    private final boolean writeBoundaryParticles;
     private FileWriter fw;
 
-    public PedestrianFileGenerator(String filename, double hallLength, double hallWidth, boolean writeBoundaryParticles, boolean writeWalls) {
+    public PedestrianFileGenerator(String filename, double innerRadius, double outerRadius, boolean writeWalls) {
         try {
             File directory = new File(folder);
             if (!directory.exists()) {
@@ -34,21 +33,15 @@ public class PedestrianFileGenerator implements FileGenerator {
             e.printStackTrace();
         }
         this.bw = new BufferedWriter(fw);
-        this.writeBoundaryParticles = writeBoundaryParticles;
         if(writeWalls) {
-            writeWall(filename, hallLength, hallWidth);
+            writeWall(filename, innerRadius, outerRadius);
         }
     }
 
-    public void addToFile(List<Particle> particles, List<Particle> boundaryParticles, double timePassed) {
+    public void addToFile(List<Particle> particles, double timePassed) {
         try {
-            if(writeBoundaryParticles) {
-                bw.write((particles.size() + boundaryParticles.size()) + "\n");
-            }
-            else{
-                bw.write(particles.size() + "\n");
-            }
-            bw.write("id xPosition yPosition xVelocity yVelocity radius timePassed\n");
+            bw.write(particles.size() + "\n");
+            bw.write("id xPosition yPosition xVelocity yVelocity radius overlapped timePassed\n");
             for (Particle particle : particles) {
                 bw.write(particle.getId() + " " +
                         particle.getPosition().getX() + " " +
@@ -56,18 +49,8 @@ public class PedestrianFileGenerator implements FileGenerator {
                         particle.getVelocity().getX() + " " +
                         particle.getVelocity().getY() + " " +
                         particle.getRadius() + " " +
+                        particle.isOverlapped() + " " +
                         timePassed + "\n");
-            }
-            if(writeBoundaryParticles) {
-                for (Particle particle : boundaryParticles) {
-                    bw.write(particle.getId() + " " +
-                            particle.getPosition().getX() + " " +
-                            particle.getPosition().getY() + " " +
-                            particle.getVelocity().getX() + " " +
-                            particle.getVelocity().getY() + " " +
-                            particle.getRadius() + " " +
-                            timePassed + "\n");
-                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -82,7 +65,7 @@ public class PedestrianFileGenerator implements FileGenerator {
         }
     }
 
-    private void writeWall(String filename, double hallLength, double hallWidth) {
+    private void writeWall(String filename, double innerRadius, double outerRadius) {
         int n = 0;
         try {
             FileWriter pw = new FileWriter("out/walls-" + filename + ".xyz");
@@ -91,15 +74,18 @@ public class PedestrianFileGenerator implements FileGenerator {
             BufferedWriter bw = new BufferedWriter(pw);
 
             bw.write("xPosition yPosition radius\n");
-            for (double x = 0; x < hallLength; x += WALLS_RADIUS) {
-                bw.write(x + " " + (hallWidth) + " " + WALLS_RADIUS + "\n");
-                bw.write(x + " " + (0) + " " + WALLS_RADIUS + "\n");
-                n += 2;
+            double xPosition, yPosition;
+            for(double angle = 0.0; angle < 360.0; angle += 0.1){
+                xPosition = innerRadius * Math.sin(Math.toRadians(angle));
+                yPosition = innerRadius * Math.cos(Math.toRadians(angle));
+                bw.write(xPosition + " " + yPosition + " " + WALLS_RADIUS + "\n");
+                n++;
             }
-            for (double y = 0; y < hallWidth; y += WALLS_RADIUS) {
-                bw.write((hallLength) + " " + y + " " + WALLS_RADIUS + "\n");
-                bw.write((0) + " " + y + " " + WALLS_RADIUS + "\n");
-                n += 2;
+            for(double angle = 0; angle < 360; angle += 0.1){
+                xPosition = outerRadius * Math.sin(Math.toRadians(angle));
+                yPosition = outerRadius * Math.cos(Math.toRadians(angle));
+                bw.write(xPosition + " " + yPosition + " " + WALLS_RADIUS + "\n");
+                n++;
             }
             bw.close();
 

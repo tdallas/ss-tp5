@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Random;
 
 public class PedestrianSystemGenerator {
-    private final double length;
-    private final double width;
+    private final double innerRadius;
+    private final double outerRadius;
     private final double maxRadius;
     private final double minRadius;
     private final double maxVelocity;
@@ -21,21 +21,21 @@ public class PedestrianSystemGenerator {
     private int particlesCreated;
     private int idCounter;
 
-    private static final double MAX_DENSITY = 7.5;
+    private static final double MAX_DENSITY = 9;
 
 
-    public PedestrianSystemGenerator(int totalQuantity, Random random, double length, double width, double maxRadius, double minRadius, double maxVelocity, double beta) {
+    public PedestrianSystemGenerator(int totalQuantity, Random random, double innerRadius, double outerRadius, double minRadius, double maxRadius, double maxVelocity, double beta) {
         this.idCounter = 0;
         this.particlesCreated = 0;
         this.totalQuantity = totalQuantity;
-        this.length = length;
-        this.width = width;
-        this.maxRadius = maxRadius;
+        this.innerRadius = innerRadius;
+        this.outerRadius = outerRadius;
         this.minRadius = minRadius;
+        this.maxRadius = maxRadius;
         this.maxVelocity = maxVelocity;
         this.beta = beta;
         this.random = random;
-        this.density = totalQuantity / (length * width);
+        this.density = totalQuantity / (Math.PI * ((outerRadius*outerRadius) - (innerRadius*innerRadius)));
         if (density > MAX_DENSITY) {
             throw new IllegalArgumentException("Could not generate this many particles for this area.");
         }
@@ -51,23 +51,28 @@ public class PedestrianSystemGenerator {
     }
 
     private Particle createParticle() {
-        double xPosition = 0, yPosition = 0, xVelocity, radius = 0;
+        double xPosition = 0, yPosition = 0, xVelocity, yVelocity, radius = 0, randomAngle, randomPositionRadius;
         int checkedParticles;
         boolean particleOverlaps = true;
 
         while (particleOverlaps) {
-            radius = generateRandomDouble(minRadius, maxRadius - (density / MAX_DENSITY) * (maxRadius - minRadius));
-            xPosition = generateRandomDouble(radius, length - radius);
-            yPosition = generateRandomDouble(radius, width - radius);
+//            radius = generateRandomDouble(minRadius, maxRadius - (density / MAX_DENSITY) * (maxRadius - minRadius));
+            radius = minRadius;
+            randomAngle = generateRandomDouble(0, 360);
+            randomPositionRadius = generateRandomDouble(innerRadius + radius, outerRadius - radius);
+            xPosition = randomPositionRadius * Math.sin(Math.toRadians(randomAngle));
+            yPosition = randomPositionRadius * Math.cos(Math.toRadians(randomAngle));
             checkedParticles = checkCorrectParticleDistribution(xPosition, yPosition, radius);
             if (checkedParticles == particles.size()) {
                 particleOverlaps = false;
             }
         }
+        double velocityAngle = Math.atan2(xPosition, yPosition) - Math.PI/2;
+        double velocityModule = maxVelocity * Math.pow((radius - minRadius) / (maxRadius - minRadius), beta);
+        xVelocity = velocityModule * Math.sin(velocityAngle);
+        yVelocity = velocityModule * Math.cos(velocityAngle);
 
-        xVelocity = maxVelocity * Math.pow((radius - minRadius) / (maxRadius - minRadius), beta);
-
-        return new Particle(idCounter++, new Vector(xPosition, yPosition), new Vector(xVelocity, 0), radius, false);
+        return new Particle(idCounter++, new Vector(xPosition, yPosition), new Vector(xVelocity, yVelocity), radius, false);
     }
 
     private double generateRandomDouble(final double min, final double max) {
