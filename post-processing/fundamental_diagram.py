@@ -40,14 +40,6 @@ def plot_fundamental_diagram(average_velocities, average_velocities_error_bars, 
     plt.tight_layout()
     plt.show()
 
-print('Plotting with 1 width')
-inner_radius = 2
-outer_radius = 3
-max_particles = 105
-particles_jump = 5
-parameters_string = 'p1'
-average_velocities_3, average_velocities_error_bars_3, densities_3 = parse_fundamental_diagram_data(parameters_string, max_particles, particles_jump, inner_radius, outer_radius)
-plot_fundamental_diagram(average_velocities_3, average_velocities_error_bars_3, densities_3)
 
 print('Plotting with 2 width')
 inner_radius = 2
@@ -55,8 +47,8 @@ outer_radius = 4
 max_particles = 260
 particles_jump = 13
 parameters_string = 'p1'
-average_velocities_4, average_velocities_error_bars_4, densities_4 = parse_fundamental_diagram_data(parameters_string, max_particles, particles_jump, inner_radius, outer_radius)
-plot_fundamental_diagram(average_velocities_4, average_velocities_error_bars_4, densities_4)
+average_velocities_2, average_velocities_error_bars_2, densities_2 = parse_fundamental_diagram_data(parameters_string, max_particles, particles_jump, inner_radius, outer_radius)
+plot_fundamental_diagram(average_velocities_2, average_velocities_error_bars_2, densities_2)
 
 print('Plotting with 3 width')
 inner_radius = 2
@@ -64,8 +56,8 @@ outer_radius = 5
 max_particles = 480
 particles_jump = 24
 parameters_string = 'p1'
-average_velocities_5, average_velocities_error_bars_5, densities_5 = parse_fundamental_diagram_data(parameters_string, max_particles, particles_jump, inner_radius, outer_radius)
-plot_fundamental_diagram(average_velocities_5, average_velocities_error_bars_5, densities_5)
+average_velocities_3, average_velocities_error_bars_3, densities_3 = parse_fundamental_diagram_data(parameters_string, max_particles, particles_jump, inner_radius, outer_radius)
+plot_fundamental_diagram(average_velocities_3, average_velocities_error_bars_3, densities_3)
 
 print('Plotting with 4 width')
 inner_radius = 2
@@ -73,8 +65,8 @@ outer_radius = 6
 max_particles = 700
 particles_jump = 35
 parameters_string = 'p1'
-average_velocities_6, average_velocities_error_bars_6, densities_6 = parse_fundamental_diagram_data(parameters_string, max_particles, particles_jump, inner_radius, outer_radius)
-plot_fundamental_diagram(average_velocities_6, average_velocities_error_bars_6, densities_6)
+average_velocities_4, average_velocities_error_bars_4, densities_4 = parse_fundamental_diagram_data(parameters_string, max_particles, particles_jump, inner_radius, outer_radius)
+plot_fundamental_diagram(average_velocities_4, average_velocities_error_bars_4, densities_4)
 
 print('Plotting with 5 width')
 inner_radius = 2
@@ -82,15 +74,14 @@ outer_radius = 7
 max_particles = 1000
 particles_jump = 50
 parameters_string = 'p1'
-average_velocities_7, average_velocities_error_bars_7, densities_7 = parse_fundamental_diagram_data(parameters_string, max_particles, particles_jump, inner_radius, outer_radius)
-plot_fundamental_diagram(average_velocities_7, average_velocities_error_bars_7, densities_7)
+average_velocities_5, average_velocities_error_bars_5, densities_5 = parse_fundamental_diagram_data(parameters_string, max_particles, particles_jump, inner_radius, outer_radius)
+plot_fundamental_diagram(average_velocities_5, average_velocities_error_bars_5, densities_5)
 
 
-plt.plot(densities_3, average_velocities_3, label='1 width')
-plt.plot(densities_4, average_velocities_4, label='2 width')
-plt.plot(densities_5, average_velocities_5, label='3 width')
-plt.plot(densities_6, average_velocities_6, label='4 width')
-plt.plot(densities_7, average_velocities_7, label='5 width')
+plt.plot(densities_2, average_velocities_2, label='2 width')
+plt.plot(densities_3, average_velocities_3, label='3 width')
+plt.plot(densities_4, average_velocities_4, label='4 width')
+plt.plot(densities_5, average_velocities_5, label='5 width')
 plt.xlabel('Densidad [1/m²]', fontsize=16)
 plt.ylabel('Velocidad Promedio [m/s]', fontsize=16)
 plt.title('Comparación de ancho de pasillo')
