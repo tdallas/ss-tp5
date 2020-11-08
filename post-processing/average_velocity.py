@@ -12,7 +12,8 @@ def parse_average_velocity(file):
         velocities = []
         time.append(iteration[0].get_time_passed())
         for particle in iteration:
-            velocities.append(particle.get_velocity())
+            if not particle.is_overlapped():
+                velocities.append(particle.get_velocity())
         average_velocities.append(np.average(velocities))
 
     return average_velocities, time

@@ -23,7 +23,8 @@ def parse_fundamental_diagram_data(parameters_string, max_particles, particles_j
             iteration = output[i]
             velocities = []
             for particle in iteration:
-                velocities.append(particle.get_velocity())
+                if not particle.is_overlapped():
+                    velocities.append(particle.get_velocity())
             average_velocities_iteration.append(np.average(velocities))
         average_velocities.append(np.average(average_velocities_iteration))
         average_velocities_error_bars.append(np.std(average_velocities_iteration))

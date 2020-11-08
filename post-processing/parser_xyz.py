@@ -28,11 +28,11 @@ class XYZParser:
     
     @staticmethod
     def is_header(line):
-        return line == 'id xPosition yPosition xVelocity yVelocity radius timePassed\n'
+        return line == 'id xPosition yPosition xVelocity yVelocity radius overlapped timePassed\n'
 
     def iteration_finished(self, line):
         return len(line.split(' ')) == 1
 
     @staticmethod
     def create_particle(line):
-        return Particle(line[0], line[1], line[2], line[3], line[4], line[5], line[6])
+        return Particle(line[0], line[1], line[2], line[3], line[4], line[5], line[6], line[7])

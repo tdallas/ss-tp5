@@ -48,7 +48,7 @@ public class PedestrianFileGenerator implements FileGenerator {
             else{
                 bw.write(particles.size() + "\n");
             }
-            bw.write("id xPosition yPosition xVelocity yVelocity radius timePassed\n");
+            bw.write("id xPosition yPosition xVelocity yVelocity radius overlapped timePassed\n");
             for (Particle particle : particles) {
                 bw.write(particle.getId() + " " +
                         particle.getPosition().getX() + " " +
@@ -56,6 +56,7 @@ public class PedestrianFileGenerator implements FileGenerator {
                         particle.getVelocity().getX() + " " +
                         particle.getVelocity().getY() + " " +
                         particle.getRadius() + " " +
+                        particle.isOverlapped() + " " +
                         timePassed + "\n");
             }
             if(writeBoundaryParticles) {
@@ -66,6 +67,7 @@ public class PedestrianFileGenerator implements FileGenerator {
                             particle.getVelocity().getX() + " " +
                             particle.getVelocity().getY() + " " +
                             particle.getRadius() + " " +
+                            particle.isOverlapped() + " " +
                             timePassed + "\n");
                 }
             }
