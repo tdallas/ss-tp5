@@ -78,13 +78,13 @@ public class TimeStepSimulator {
                 Vector wallPosition = new Vector(outerWallXPosition, outerWallYPosition);
                 double xEscape = Math.abs(wallPosition.perpendicularVector(p1.getPosition()).getX());
                 double yEscape = Math.abs(wallPosition.perpendicularVector(p1.getPosition()).getY());
-                if(p1.getPosition().getX() >= 0 && p1.getPosition().getY() >= 0) {
+                if (p1.getPosition().getX() >= 0 && p1.getPosition().getY() >= 0) {
                     escapeVelocity = escapeVelocity.add(new Vector(-xEscape, -yEscape));
-                } else if(p1.getPosition().getX() < 0 && p1.getPosition().getY() >= 0){
+                } else if (p1.getPosition().getX() < 0 && p1.getPosition().getY() >= 0) {
                     escapeVelocity = escapeVelocity.add(new Vector(xEscape, -yEscape));
-                } else if(p1.getPosition().getX() >= 0 && p1.getPosition().getY() < 0){
+                } else if (p1.getPosition().getX() >= 0 && p1.getPosition().getY() < 0) {
                     escapeVelocity = escapeVelocity.add(new Vector(-xEscape, yEscape));
-                } else{
+                } else {
                     escapeVelocity = escapeVelocity.add(new Vector(xEscape, yEscape));
                 }
                 overlappedParticle = true;
@@ -121,7 +121,7 @@ public class TimeStepSimulator {
 
             // Change velocity if not overlapped with new radius
             if (!particle.isOverlapped()) {
-                double velocityAngle = Math.atan2(particle.getPosition().getX(), particle.getPosition().getY()) - Math.PI/2;
+                double velocityAngle = Math.atan2(particle.getPosition().getX(), particle.getPosition().getY()) - Math.PI / 2;
                 double velocityModule = maxVelocity * Math.pow((particle.getRadius() - minRadius) / (maxRadius - minRadius), beta);
                 double xVelocity = velocityModule * Math.sin(velocityAngle);
                 double yVelocity = velocityModule * Math.cos(velocityAngle);

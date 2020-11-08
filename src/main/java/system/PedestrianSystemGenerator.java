@@ -35,7 +35,7 @@ public class PedestrianSystemGenerator {
         this.maxVelocity = maxVelocity;
         this.beta = beta;
         this.random = random;
-        this.density = totalQuantity / (Math.PI * ((outerRadius*outerRadius) - (innerRadius*innerRadius)));
+        this.density = totalQuantity / (Math.PI * ((outerRadius * outerRadius) - (innerRadius * innerRadius)));
         if (density > MAX_DENSITY) {
             throw new IllegalArgumentException("Could not generate this many particles for this area.");
         }
@@ -67,7 +67,7 @@ public class PedestrianSystemGenerator {
                 particleOverlaps = false;
             }
         }
-        double velocityAngle = Math.atan2(xPosition, yPosition) - Math.PI/2;
+        double velocityAngle = Math.atan2(xPosition, yPosition) - Math.PI / 2;
         double velocityModule = maxVelocity * Math.pow((radius - minRadius) / (maxRadius - minRadius), beta);
         xVelocity = velocityModule * Math.sin(velocityAngle);
         yVelocity = velocityModule * Math.cos(velocityAngle);

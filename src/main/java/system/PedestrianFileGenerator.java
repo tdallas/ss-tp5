@@ -33,7 +33,7 @@ public class PedestrianFileGenerator implements FileGenerator {
             e.printStackTrace();
         }
         this.bw = new BufferedWriter(fw);
-        if(writeWalls) {
+        if (writeWalls) {
             writeWall(filename, innerRadius, outerRadius);
         }
     }
@@ -75,13 +75,13 @@ public class PedestrianFileGenerator implements FileGenerator {
 
             bw.write("xPosition yPosition radius\n");
             double xPosition, yPosition;
-            for(double angle = 0.0; angle < 360.0; angle += 0.1){
+            for (double angle = 0.0; angle < 360.0; angle += 0.1) {
                 xPosition = innerRadius * Math.sin(Math.toRadians(angle));
                 yPosition = innerRadius * Math.cos(Math.toRadians(angle));
                 bw.write(xPosition + " " + yPosition + " " + WALLS_RADIUS + "\n");
                 n++;
             }
-            for(double angle = 0; angle < 360; angle += 0.1){
+            for (double angle = 0; angle < 360; angle += 0.1) {
                 xPosition = outerRadius * Math.sin(Math.toRadians(angle));
                 yPosition = outerRadius * Math.cos(Math.toRadians(angle));
                 bw.write(xPosition + " " + yPosition + " " + WALLS_RADIUS + "\n");
