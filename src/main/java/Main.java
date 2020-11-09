@@ -5,6 +5,5 @@ public class Main {
         PedestrianSystem.runSimulationParameters1();
         PedestrianSystem.runSimulationParameters2();
         PedestrianSystem.runFundamentalDiagramsForWidthComparison();
-        PedestrianSystem.runTest();
     }
 }

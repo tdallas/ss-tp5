@@ -23,11 +23,10 @@ def plot_average_velocity(average_velocities, time, max_velocity):
     plt.xlabel('Tiempo [s]', fontsize=16)
     plt.ylabel('Velocidad [m/s]', fontsize=16)
     plt.title('Velocidad promedio')
-    plt.ylim(0, max_velocity)
+    plt.ylim(0, 1.65)
     plt.tight_layout()
     plt.show()
 
-file = 'out/test.xyz'
-max_velocity = 1.55
+file = 'out/output-p1-circle.xyz'
 average_velocities, time = parse_average_velocity(file)
 plot_average_velocity(average_velocities, time, max_velocity)
