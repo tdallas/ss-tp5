@@ -56,6 +56,7 @@ public class TimeStepSimulator {
 
     private void checkCollisionsAndEscapeVelocities(List<Particle> particles) {
         for (Particle p1 : particles) {
+            p1.setOverlapped(false);
             Vector escapeVelocity = new Vector(0, 0);
             boolean overlappedParticle = false;
 
@@ -138,7 +139,6 @@ public class TimeStepSimulator {
             }
 
             particle.setPosition(newPosition);
-            particle.setOverlapped(false);
         }
     }
 }

@@ -56,7 +56,8 @@ public class PedestrianSystemGenerator {
         boolean particleOverlaps = true;
 
         while (particleOverlaps) {
-            radius = generateRandomDouble(minRadius, maxRadius - (density / MAX_DENSITY) * (maxRadius - minRadius));
+//            radius = generateRandomDouble(minRadius, maxRadius - (density / MAX_DENSITY) * (maxRadius - minRadius));
+            radius = minRadius;
             xPosition = generateRandomDouble(radius, length - radius);
             yPosition = generateRandomDouble(radius, width - radius);
             checkedParticles = checkCorrectParticleDistribution(xPosition, yPosition, radius);

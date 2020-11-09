@@ -16,10 +16,10 @@ public class PedestrianSystem {
     private static final double WIDTH_1 = WIDTH_MULTIPLIER_1 * (MAX_RADIUS_1 + MIN_RADIUS_1);  // m
     private static final double BETA_1 = 0.9;
     private static final double TAU_1 = 0.5; // s
-    private static final double TIME_DELTA_1 = 0.02;  // s        r_min/2*v_max
+    private static final double TIME_DELTA_1 = 0.05;  // s        r_min/2*v_max
     private static final double SAVE_TIME_DELTA_1 = TIME_DELTA_1; // s
     private static final int PARTICLES_QUANTITY_1 = 100;
-    private static final String FILENAME_1 = "output-p1" ;
+    private static final String FILENAME_1 = "output-p1-rectangle" ;
 
     // Parameters 2
     private static final double MIN_RADIUS_2 = 0.10; // m
@@ -31,12 +31,12 @@ public class PedestrianSystem {
     private static final double WIDTH_2 = WIDTH_MULTIPLIER_2 * (MAX_RADIUS_2 + MIN_RADIUS_2);  // m
     private static final double BETA_2 = 0.9;
     private static final double TAU_2 = 0.5; // s
-    private static final double TIME_DELTA_2 = 0.02;  // s        r_min/2*v_max
+    private static final double TIME_DELTA_2 = 0.05;  // s        r_min/2*v_max
     private static final double SAVE_TIME_DELTA_2 = TIME_DELTA_2; // s
     private static final int PARTICLES_QUANTITY_2 = 100;
-    private static final String FILENAME_2 = "output-p2" ;
+    private static final String FILENAME_2 = "output-p2-rectangle" ;
 
-    private static final double SIMULATION_TIME = 30; // s
+    private static final double SIMULATION_TIME = 100; // s
 
     public static void runSimulation(String fileName, int particlesQuantity, double timeDelta, double saveTimeDelta, double simulationTime, double minRadius, double maxRadius, double maxVelocity, double length, double width, double beta, double tau, boolean writeBoundaryParticles, boolean writeWalls, Long seed) {
         Random random;
@@ -122,16 +122,13 @@ public class PedestrianSystem {
     }
 
     public static void runFundamentalDiagramsForWidthComparison() {
-        runSimulationsForFundamentalDiagram("p1", 200, 5, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 3, BETA_1, TAU_1);
-        runSimulationsForFundamentalDiagram("p1", 250, 5, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 4, BETA_1, TAU_1);
-        runSimulationsForFundamentalDiagram("p1", 400, 10, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 5, BETA_1, TAU_1);
-        runSimulationsForFundamentalDiagram("p1", 460, 10, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 6, BETA_1, TAU_1);
-        runSimulationsForFundamentalDiagram("p1", 500, 20, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 7, BETA_1, TAU_1);
-        runSimulationsForFundamentalDiagram("p1", 560, 20, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 8, BETA_1, TAU_1);
-    }
+        runSimulationsForFundamentalDiagram("p1-rectangle", 200, 5, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 3, BETA_1, TAU_1);
+        runSimulationsForFundamentalDiagram("p1-rectangle", 250, 5, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 4, BETA_1, TAU_1);
+        runSimulationsForFundamentalDiagram("p1-rectangle", 400, 10, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 5, BETA_1, TAU_1);
+        runSimulationsForFundamentalDiagram("p1-rectangle", 460, 10, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 6, BETA_1, TAU_1);
+        runSimulationsForFundamentalDiagram("p1-rectangle", 500, 20, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 7, BETA_1, TAU_1);
+        runSimulationsForFundamentalDiagram("p1-rectangle", 560, 20, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, 8, BETA_1, TAU_1);
 
-    public static void runFundamentalDiagramsForExperimentalComparison() {
-        runSimulationsForFundamentalDiagram("p1", 400, 10, TIME_DELTA_1, SAVE_TIME_DELTA_1, SIMULATION_TIME, MIN_RADIUS_1, MAX_RADIUS_1, MAX_VELOCITY_1, WIDTH_MULTIPLIER_1, BETA_1, TAU_1);
-        runSimulationsForFundamentalDiagram("p2", 400, 10, TIME_DELTA_2, SAVE_TIME_DELTA_2, SIMULATION_TIME, MIN_RADIUS_2, MAX_RADIUS_2, MAX_VELOCITY_2, WIDTH_MULTIPLIER_2, BETA_2, TAU_2);
+        runSimulationsForFundamentalDiagram("p2-rectangle", 400, 10, TIME_DELTA_2, SAVE_TIME_DELTA_2, SIMULATION_TIME, MIN_RADIUS_2, MAX_RADIUS_2, MAX_VELOCITY_2, WIDTH_MULTIPLIER_2, BETA_2, TAU_2);
     }
 }

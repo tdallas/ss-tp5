@@ -18,7 +18,7 @@ def parse_fundamental_diagram_data(parameters_string, max_particles, particles_j
         parsed_data = XYZParser(file)
         output = parsed_data.get_output()
         average_velocities_iteration = []
-        for i in range(int((len(output)/3)), len(output)):
+        for i in range(int((len(output)/2)), len(output)):
             iteration = output[i]
             velocities = []
             for particle in iteration:
@@ -38,6 +38,7 @@ def plot_fundamental_diagram(average_velocities, average_velocities_error_bars, 
     plt.xlabel('Densidad [1/m²]', fontsize=16)
     plt.ylabel('Velocidad Promedio [m/s]', fontsize=16)
     plt.title('Diagrama Fundamental')
+    plt.ylim(0, 1.65)
     plt.tight_layout()
     plt.show()
 
@@ -48,7 +49,7 @@ radius = 4
 width_multiplier = 3
 max_particles = 200
 particles_jump = 5
-parameters_string = 'p1'
+parameters_string = 'p1-rectangle'
 average_velocities_3, average_velocities_error_bars_3, densities_3 = parse_fundamental_diagram_data(parameters_string, max_particles, particles_jump, min_radius, max_radius, radius, width_multiplier)
 plot_fundamental_diagram(average_velocities_3, average_velocities_error_bars_3, densities_3)
 
@@ -59,7 +60,7 @@ radius = 4
 width_multiplier = 4
 max_particles = 250
 particles_jump = 5
-parameters_string = 'p1'
+parameters_string = 'p1-rectangle'
 average_velocities_4, average_velocities_error_bars_4, densities_4 = parse_fundamental_diagram_data(parameters_string, max_particles, particles_jump, min_radius, max_radius, radius, width_multiplier)
 plot_fundamental_diagram(average_velocities_4, average_velocities_error_bars_4, densities_4)
 
@@ -70,7 +71,7 @@ radius = 4
 width_multiplier = 5
 max_particles = 400
 particles_jump = 10
-parameters_string = 'p1'
+parameters_string = 'p1-rectangle'
 average_velocities_5, average_velocities_error_bars_5, densities_5 = parse_fundamental_diagram_data(parameters_string, max_particles, particles_jump, min_radius, max_radius, radius, width_multiplier)
 plot_fundamental_diagram(average_velocities_5, average_velocities_error_bars_5, densities_5)
 
@@ -81,7 +82,7 @@ radius = 4
 width_multiplier = 6
 max_particles = 460
 particles_jump = 10
-parameters_string = 'p1'
+parameters_string = 'p1-rectangle'
 average_velocities_6, average_velocities_error_bars_6, densities_6 = parse_fundamental_diagram_data(parameters_string, max_particles, particles_jump, min_radius, max_radius, radius, width_multiplier)
 plot_fundamental_diagram(average_velocities_6, average_velocities_error_bars_6, densities_6)
 
@@ -92,7 +93,7 @@ radius = 4
 width_multiplier = 7
 max_particles = 500
 particles_jump = 20
-parameters_string = 'p1'
+parameters_string = 'p1-rectangle'
 average_velocities_7, average_velocities_error_bars_7, densities_7 = parse_fundamental_diagram_data(parameters_string, max_particles, particles_jump, min_radius, max_radius, radius, width_multiplier)
 plot_fundamental_diagram(average_velocities_7, average_velocities_error_bars_7, densities_7)
 
@@ -103,7 +104,7 @@ radius = 4
 width_multiplier = 8
 max_particles = 560
 particles_jump = 20
-parameters_string = 'p1'
+parameters_string = 'p1-rectangle'
 average_velocities_8, average_velocities_error_bars_8, densities_8 = parse_fundamental_diagram_data(parameters_string, max_particles, particles_jump, min_radius, max_radius, radius, width_multiplier)
 plot_fundamental_diagram(average_velocities_8, average_velocities_error_bars_8, densities_8)
 
@@ -118,5 +119,6 @@ plt.xlabel('Densidad [1/m²]', fontsize=16)
 plt.ylabel('Velocidad Promedio [m/s]', fontsize=16)
 plt.title('Comparación de ancho de pasillo')
 plt.legend(title='Ancho de pasillo')
+plt.ylim(0, 1.65)
 plt.tight_layout()
 plt.show()

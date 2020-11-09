@@ -18,7 +18,7 @@ def parse_fundamental_diagram_data(parameters_string, max_particles, particles_j
         parsed_data = XYZParser(file)
         output = parsed_data.get_output()
         average_velocities_iteration = []
-        for i in range(int((len(output)/3)), len(output)):
+        for i in range(int((len(output)/2)), len(output)):
             iteration = output[i]
             velocities = []
             for particle in iteration:
@@ -102,5 +102,6 @@ plt.xlabel('Densidad [1/m²]', fontsize=16)
 plt.ylabel('Velocidad Promedio [m/s]', fontsize=16)
 plt.title('Comparación de ancho de pasillo')
 plt.legend(title='Ancho de pasillo')
+plt.ylim(0, 1.65)
 plt.tight_layout()
 plt.show()

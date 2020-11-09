@@ -19,7 +19,7 @@ def parse_fundamental_diagram_data(parameters_string, max_particles, particles_j
         parsed_data = XYZParser(file)
         output = parsed_data.get_output()
         average_velocities_iteration = []
-        for i in range(int((len(output)/3)), len(output)):
+        for i in range(int((len(output)/2)), len(output)):
             iteration = output[i]
             velocities = []
             for particle in iteration:
@@ -50,6 +50,7 @@ def plot_experimental_comparison(label_string, average_velocities, average_veloc
     plt.ylabel('Velocidad Promedio [m/s]', fontsize=16)
     plt.title('Comparación con diagramas fundamentales')
     plt.legend(title='Diagrama Fundamental')
+    plt.ylim(0, 1.65)
     plt.tight_layout()
     plt.show()
     
@@ -61,7 +62,7 @@ radius = 4
 width_multiplier = 5
 max_particles = 400
 particles_jump = 10
-parameters_string = 'p1'
+parameters_string = 'p1-rectangle'
 label_string_p1 = 'Parámetros 1'
 average_velocities_p1, average_velocities_error_bars_p1, densities_p1 = parse_fundamental_diagram_data(parameters_string, max_particles, particles_jump, min_radius, max_radius, radius, width_multiplier)
 plot_experimental_comparison(label_string_p1, average_velocities_p1, average_velocities_error_bars_p1, densities_p1)
@@ -73,7 +74,7 @@ radius = 4
 width_multiplier = 5
 max_particles = 400
 particles_jump = 10
-parameters_string = 'p2'
+parameters_string = 'p2-rectangle'
 label_string_p2 = 'Parámetros 2'
 average_velocities_p2, average_velocities_error_bars_p2, densities_p2 = parse_fundamental_diagram_data(parameters_string, max_particles, particles_jump, min_radius, max_radius, radius, width_multiplier)
 plot_experimental_comparison(label_string_p2, average_velocities_p2, average_velocities_error_bars_p2, densities_p2)
