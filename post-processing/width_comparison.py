@@ -11,19 +11,37 @@ def parse_fundamental_diagram_data(parameters_string, max_particles, particles_j
     average_velocities_error_bars = []
     densities = []
 
+    print('Processing ' + str(3) + ' particles...')
+    file = "out/{}-width-{}-particles-{}.xyz".format(parameters_string, str(float(width)), 3)
+    parsed_data = XYZParser(file)
+    output = parsed_data.get_output()
+    average_velocities_iteration = []
+    for i in range(int((len(output)/3)), len(output)):
+        iteration = output[i]
+        velocities = []
+        for particle in iteration:
+            if not particle.is_overlapped():
+                velocities.append(particle.get_velocity())
+        if(len(velocities) > 0):
+            average_velocities_iteration.append(np.average(velocities))
+    average_velocities.append(np.average(average_velocities_iteration))
+    average_velocities_error_bars.append(np.std(average_velocities_iteration))
+    densities.append(1 / area)
+
     for particles_quantity in range(particles_jump, max_particles + 1, particles_jump):
         print('Processing ' + str(particles_quantity) + ' particles...')
         file = "out/{}-width-{}-particles-{}.xyz".format(parameters_string, str(float(width)), particles_quantity)
         parsed_data = XYZParser(file)
         output = parsed_data.get_output()
         average_velocities_iteration = []
-        for i in range(int((len(output)/2)), len(output)):
+        for i in range(int((len(output)/3)), len(output)):
             iteration = output[i]
             velocities = []
             for particle in iteration:
                 if not particle.is_overlapped():
                     velocities.append(particle.get_velocity())
-            average_velocities_iteration.append(np.average(velocities))
+            if(len(velocities) > 0):
+                    average_velocities_iteration.append(np.average(velocities))
         average_velocities.append(np.average(average_velocities_iteration))
         average_velocities_error_bars.append(np.std(average_velocities_iteration))
         densities.append(particles_quantity / area)

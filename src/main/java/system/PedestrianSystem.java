@@ -95,6 +95,21 @@ public class PedestrianSystem {
 
     public static void runSimulationsForFundamentalDiagram(String parameters, int maxParticles, int particlesJump, double timeDelta, double saveTimeDelta, double simulationTime, double minRadius, double maxRadius, double maxVelocity, double innerRadius, double outerRadius, double beta, double tau) {
         System.out.println("Starting simulations for Fundamental Diagram with width: " + (outerRadius - innerRadius));
+        runSimulation(parameters + "-width-" + (outerRadius - innerRadius) + "-particles-3",
+                3,
+                timeDelta,
+                saveTimeDelta,
+                simulationTime,
+                minRadius,
+                maxRadius,
+                maxVelocity,
+                innerRadius,
+                outerRadius,
+                beta,
+                tau,
+                false,
+                false,
+                null);
         for (int particlesQuantity = particlesJump; particlesQuantity <= maxParticles; particlesQuantity += particlesJump) {
             System.out.println("Simulating " + particlesQuantity + " particles.");
             runSimulation(parameters + "-width-" + (outerRadius - innerRadius) + "-particles-" + particlesQuantity,

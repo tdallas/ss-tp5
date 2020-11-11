@@ -14,11 +14,14 @@ def parse_average_velocity(file):
         for particle in iteration:
             if not particle.is_overlapped():
                 velocities.append(particle.get_velocity())
-        average_velocities.append(np.average(velocities))
+        if(len(velocities) > 0):
+            average_velocities.append(np.average(velocities))
+        else:
+            time.pop()
 
     return average_velocities, time
 
-def plot_average_velocity(average_velocities, time, max_velocity):
+def plot_average_velocity(average_velocities, time):
     plt.plot(time, average_velocities)
     plt.xlabel('Tiempo [s]', fontsize=16)
     plt.ylabel('Velocidad [m/s]', fontsize=16)
@@ -27,6 +30,6 @@ def plot_average_velocity(average_velocities, time, max_velocity):
     plt.tight_layout()
     plt.show()
 
-file = 'out/output-p1-circle.xyz'
+file = 'out/p1-circle-width-1.0-particles-3.xyz'
 average_velocities, time = parse_average_velocity(file)
-plot_average_velocity(average_velocities, time, max_velocity)
+plot_average_velocity(average_velocities, time)

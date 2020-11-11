@@ -17,7 +17,7 @@ class XYZParser:
                 if self.is_header(line):
                     pass
                 elif self.iteration_finished(line):
-                    if len(iteration) > 1:
+                    if len(iteration) > 0:
                         output.append(iteration)
                     iteration = []
                 else:
