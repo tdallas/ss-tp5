@@ -26,7 +26,7 @@ def parse_fundamental_diagram_data(parameters_string, max_particles, particles_j
             average_velocities_iteration.append(np.average(velocities))
     average_velocities.append(np.average(average_velocities_iteration))
     average_velocities_error_bars.append(np.std(average_velocities_iteration))
-    densities.append(1 / area)
+    densities.append(3 / area)
 
     for particles_quantity in range(particles_jump, max_particles + 1, particles_jump):
         print('Processing ' + str(particles_quantity) + ' particles...')
