@@ -140,4 +140,39 @@ public class PedestrianSystem {
 
         runSimulationsForFundamentalDiagram("p2-circle", 480, 24, TIME_DELTA_2, SAVE_TIME_DELTA_2, SIMULATION_TIME, MIN_RADIUS_2, MAX_RADIUS_2, MAX_VELOCITY_2, INNER_RADIUS_2, OUTER_RADIUS_2, BETA_2, TAU_2);
     }
+
+    public static void runErrorMinimization() {
+        System.out.println("Simulating " + 0.27 + " max radius.");
+        runSimulationsForFundamentalDiagram("p2-circle-rmax-27", 480, 24, TIME_DELTA_2, SAVE_TIME_DELTA_2, SIMULATION_TIME, MIN_RADIUS_2, MAX_RADIUS_2 - 0.10, MAX_VELOCITY_2, INNER_RADIUS_2, OUTER_RADIUS_2, BETA_2, TAU_2);
+        System.out.println("Simulating " + 0.28 + " max radius.");
+        runSimulationsForFundamentalDiagram("p2-circle-rmax-28", 480, 24, TIME_DELTA_2, SAVE_TIME_DELTA_2, SIMULATION_TIME, MIN_RADIUS_2, MAX_RADIUS_2 - 0.09, MAX_VELOCITY_2, INNER_RADIUS_2, OUTER_RADIUS_2, BETA_2, TAU_2);
+        System.out.println("Simulating " + 0.29 + " max radius.");
+        runSimulationsForFundamentalDiagram("p2-circle-rmax-29", 480, 24, TIME_DELTA_2, SAVE_TIME_DELTA_2, SIMULATION_TIME, MIN_RADIUS_2, MAX_RADIUS_2 - 0.08, MAX_VELOCITY_2, INNER_RADIUS_2, OUTER_RADIUS_2, BETA_2, TAU_2);
+        System.out.println("Simulating " + 0.30 + " max radius.");
+        runSimulationsForFundamentalDiagram("p2-circle-rmax-30", 480, 24, TIME_DELTA_2, SAVE_TIME_DELTA_2, SIMULATION_TIME, MIN_RADIUS_2, MAX_RADIUS_2 - 0.07, MAX_VELOCITY_2, INNER_RADIUS_2, OUTER_RADIUS_2, BETA_2, TAU_2);
+        System.out.println("Simulating " + 0.31 + " max radius.");
+        runSimulationsForFundamentalDiagram("p2-circle-rmax-31", 480, 24, TIME_DELTA_2, SAVE_TIME_DELTA_2, SIMULATION_TIME, MIN_RADIUS_2, MAX_RADIUS_2 - 0.06, MAX_VELOCITY_2, INNER_RADIUS_2, OUTER_RADIUS_2, BETA_2, TAU_2);
+        System.out.println("Simulating " + 0.32 + " max radius.");
+        runSimulationsForFundamentalDiagram("p2-circle-rmax-32", 480, 24, TIME_DELTA_2, SAVE_TIME_DELTA_2, SIMULATION_TIME, MIN_RADIUS_2, MAX_RADIUS_2 - 0.05, MAX_VELOCITY_2, INNER_RADIUS_2, OUTER_RADIUS_2, BETA_2, TAU_2);
+        System.out.println("Simulating " + 0.33 + " max radius.");
+        runSimulationsForFundamentalDiagram("p2-circle-rmax-33", 480, 24, TIME_DELTA_2, SAVE_TIME_DELTA_2, SIMULATION_TIME, MIN_RADIUS_2, MAX_RADIUS_2 - 0.04, MAX_VELOCITY_2, INNER_RADIUS_2, OUTER_RADIUS_2, BETA_2, TAU_2);
+        System.out.println("Simulating " + 0.34 + " max radius.");
+        runSimulationsForFundamentalDiagram("p2-circle-rmax-34", 480, 24, TIME_DELTA_2, SAVE_TIME_DELTA_2, SIMULATION_TIME, MIN_RADIUS_2, MAX_RADIUS_2 - 0.03, MAX_VELOCITY_2, INNER_RADIUS_2, OUTER_RADIUS_2, BETA_2, TAU_2);
+        System.out.println("Simulating " + 0.35 + " max radius.");
+        runSimulationsForFundamentalDiagram("p2-circle-rmax-35", 480, 24, TIME_DELTA_2, SAVE_TIME_DELTA_2, SIMULATION_TIME, MIN_RADIUS_2, MAX_RADIUS_2 - 0.02, MAX_VELOCITY_2, INNER_RADIUS_2, OUTER_RADIUS_2, BETA_2, TAU_2);
+        System.out.println("Simulating " + 0.36 + " max radius.");
+        runSimulationsForFundamentalDiagram("p2-circle-rmax-36", 480, 24, TIME_DELTA_2, SAVE_TIME_DELTA_2, SIMULATION_TIME, MIN_RADIUS_2, MAX_RADIUS_2 - 0.01, MAX_VELOCITY_2, INNER_RADIUS_2, OUTER_RADIUS_2, BETA_2, TAU_2);
+        System.out.println("Simulating " + 0.37 + " max radius.");
+        runSimulationsForFundamentalDiagram("p2-circle-rmax-37", 480, 24, TIME_DELTA_2, SAVE_TIME_DELTA_2, SIMULATION_TIME, MIN_RADIUS_2, MAX_RADIUS_2, MAX_VELOCITY_2, INNER_RADIUS_2, OUTER_RADIUS_2, BETA_2, TAU_2);
+        System.out.println("Simulating " + 0.38 + " max radius.");
+        runSimulationsForFundamentalDiagram("p2-circle-rmax-38", 480, 24, TIME_DELTA_2, SAVE_TIME_DELTA_2, SIMULATION_TIME, MIN_RADIUS_2, MAX_RADIUS_2 + 0.01, MAX_VELOCITY_2, INNER_RADIUS_2, OUTER_RADIUS_2, BETA_2, TAU_2);
+        System.out.println("Simulating " + 0.39 + " max radius.");
+        runSimulationsForFundamentalDiagram("p2-circle-rmax-39", 480, 24, TIME_DELTA_2, SAVE_TIME_DELTA_2, SIMULATION_TIME, MIN_RADIUS_2, MAX_RADIUS_2 + 0.02, MAX_VELOCITY_2, INNER_RADIUS_2, OUTER_RADIUS_2, BETA_2, TAU_2);
+        System.out.println("Simulating " + 0.40 + " max radius.");
+        runSimulationsForFundamentalDiagram("p2-circle-rmax-40", 480, 24, TIME_DELTA_2, SAVE_TIME_DELTA_2, SIMULATION_TIME, MIN_RADIUS_2, MAX_RADIUS_2 + 0.03, MAX_VELOCITY_2, INNER_RADIUS_2, OUTER_RADIUS_2, BETA_2, TAU_2);
+        System.out.println("Simulating " + 0.41 + " max radius.");
+        runSimulationsForFundamentalDiagram("p2-circle-rmax-41", 480, 24, TIME_DELTA_2, SAVE_TIME_DELTA_2, SIMULATION_TIME, MIN_RADIUS_2, MAX_RADIUS_2 + 0.04, MAX_VELOCITY_2, INNER_RADIUS_2, OUTER_RADIUS_2, BETA_2, TAU_2);
+        System.out.println("Simulating " + 0.42 + " max radius.");
+        runSimulationsForFundamentalDiagram("p2-circle-rmax-42", 480, 24, TIME_DELTA_2, SAVE_TIME_DELTA_2, SIMULATION_TIME, MIN_RADIUS_2, MAX_RADIUS_2 + 0.05, MAX_VELOCITY_2, INNER_RADIUS_2, OUTER_RADIUS_2, BETA_2, TAU_2);
+    }
 }

@@ -1,4 +1,4 @@
-# ss-tp4
+# ss-tp5
 # Engine and simulation
 ## Generate executable
 `mvn clean install`
@@ -10,42 +10,30 @@
 ## Output
 The program will generate all the files with similar formats like these:
 
-`out/planets-FILENAME.xyz`
+`out/FILENAME.xyz`
 
-`out/oscillators-FILENAME.csv`
+`out/walls-FILENAME.csv`
+
+These can be used to make an animation in Ovito.
 
 # Post processing
 
 **In every script, the first lines contains the file that is about to beein processed, if you want to graphic some custom behaviour, just modified the file path to match your custom file**
 
-## Oscilator
-To show oscilators graphics, run: \
-`python3 post-processing/oscilator.py` \
-and \
-`python3 post-processing/oscilator_errors.py`
+## Average Velocities over time
+To generate graphics, run: \
+`python3 post-processing/average_velocities.py`
 
-## Planets
-To show planets orbit graphics, run: \
-`python3 post-processing/planets-distance-1-year-big-delta.py` \
+## Fundamental Diagram Width Comparison
+To generate graphics, run: \
+`python3 post-processing/fundamental_diagram.py` \
 and \
-`python3 post-processing/planets-distance-1-year-small-delta.py`
+`python3 post-processing/width_comparison.py`
 
-## Mars
-To show Mars graphics, run: \
-`python3 post-processing/mars-velocity-best-day.py` \
-and \
-`python3 post-processing/mars-min-distance-per-minute.py` \
-and \
-`python3 post-processing/mars-min-distance-per-hour.py` \
-and \
-`python3 post-processing/mars-min-distance-per-day.py` 
+## Fundamental Diagram Comparison to Experimental Data
+To generate graphics, run: \
+`python3 post-processing/fundamental_diagram_comparison.py`
 
-## Jupiter
-To show Jupiter graphics, run: \
-`python3 post-processing/jupiter-velocity-best-day.py` \
-and \
-`python3 post-processing/jupiter-min-distance-per-minute.py` \
-and \
-`python3 post-processing/jupiter-min-distance-per-hour.py` \
-and \
-`python3 post-processing/jupiter-min-distance-per-day.py` 
+## Fundamental Diagram Error Minimization
+To generate graphics, run: \
+`python3 post-processing/error_minimization.py`
