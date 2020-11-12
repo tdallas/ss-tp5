@@ -40,7 +40,7 @@ def parse_quadratic_errors(parameters_string, from_number, to_number, variable_j
                 error += (average_velocities[i] - experimental_velocity)**2
                 n += 1
             i += 1
-        print('Error ' + str(error) + ' with ' + str(from_number) + ' radius.')
+        print('Error ' + str(error/n) + ' with ' + str(from_number) + ' radius.')
         errors.append(error/n)
         from_number += variable_jump
     return errors, variables
